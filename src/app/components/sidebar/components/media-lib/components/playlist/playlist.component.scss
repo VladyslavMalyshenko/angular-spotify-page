@@ -1,0 +1,92 @@
+@import "../../media-lib.component.scss";
+
+.playlist {
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: var(--ui-radius);
+  padding: 0 8px;
+  box-sizing: border-box;
+  gap: var(--ui-gap);
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: #ffffff34;
+    & .favorites {
+      & svg {
+        animation: hearBump 1s;
+      }
+    }
+  }
+
+  &.active,
+  &:active {
+    background: #ffffff15;
+  }
+
+  & .avatar {
+    width: $maxSizes;
+    height: $maxSizes;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ui-radius);
+
+    &.favorites {
+      background: linear-gradient(135deg, #6a4deb, #a6bbde);
+
+      & svg {
+        width: 35%;
+        height: 35%;
+        fill: #fff;
+        stroke: #fff;
+      }
+    }
+  }
+
+  & .playlist {
+    &-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      color: #fff;
+      height: $maxSizes;
+
+      & p {
+        margin: 0;
+      }
+
+      &-name.favorite {
+        color: #1ed760;
+      }
+
+      &-description {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+@keyframes hearBump {
+  0% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 60%;
+  }
+
+  70% {
+    scale: 100%;
+  }
+
+  80% {
+    scale: 60%;
+  }
+
+  100% {
+    scale: 100%;
+  }
+}

@@ -1,0 +1,9 @@
+<div class="media-lib">
+  <ul>
+    <app-playlist url="/collection/songs" [isFavorite]="true" />
+    @if (playlists$ | async; as playlists) { @for (playlist of playlists; track
+    playlist.id) {
+    <app-playlist [url]="'/playlist/' + playlist.id" [image]="playlist.image" />
+    } }
+  </ul>
+</div>

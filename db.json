@@ -1,0 +1,44 @@
+{
+  "collection": {
+    "songs": [
+      {
+        "id": 1,
+        "name": "???",
+        "image": "https://mosaic.scdn.co/640/ab67616d00001e02241d9ce4047c60ce87f71785ab67616d00001e02b87b6eb7fcdd4afd4c2a303bab67616d00001e02cf935cc6559902318b256e2bab67616d00001e02db40a74874367152daaee0b2",
+        "creator": "KAKTyC",
+        "song": "https://www.myinstants.com/media/sounds/slavianskii-zazhim-iaitsami.mp3"
+      },
+      {
+        "id": 2,
+        "name": "Aku Sayuang x Sprinter",
+        "image": "https://c.saavncdn.com/438/Aku-Sayang-X-Sprinter-Indonesian-2023-20231016234552-500x500.jpg",
+        "creator": "KAKTyC",
+        "song": "https://muzab.net/uploads/mp3/kirkiimad-aku-sayang-sprinter-mashup-mp3.mp3"
+      }
+    ]
+  },
+  "playlists": [
+    {
+      "id": 12332131,
+      "name": "???",
+      "image": "https://mosaic.scdn.co/640/ab67616d00001e02241d9ce4047c60ce87f71785ab67616d00001e02b87b6eb7fcdd4afd4c2a303bab67616d00001e02cf935cc6559902318b256e2bab67616d00001e02db40a74874367152daaee0b2",
+      "user": "KAKTyC",
+      "songs": [
+        {
+          "id": 1,
+          "name": "???",
+          "image": "https://mosaic.scdn.co/640/ab67616d00001e02241d9ce4047c60ce87f71785ab67616d00001e02b87b6eb7fcdd4afd4c2a303bab67616d00001e02cf935cc6559902318b256e2bab67616d00001e02db40a74874367152daaee0b2",
+          "creator": "KAKTyC",
+          "song": "https://www.myinstants.com/media/sounds/slavianskii-zazhim-iaitsami.mp3"
+        },
+        {
+          "id": 3,
+          "name": "Dika Vika",
+          "image": "https://mosaic.scdn.co/640/ab67616d00001e02241d9ce4047c60ce87f71785ab67616d00001e02b87b6eb7fcdd4afd4c2a303bab67616d00001e02cf935cc6559902318b256e2bab67616d00001e02db40a74874367152daaee0b2",
+          "creator": "Anar",
+          "song": "https://cdn.muzyet.net/?h=JGraYpdVSCYZta86mVFbIYAkjNSZL5G7DI5wW08AyYBHXdAvUWN_Rh_JsFepWmUl"
+        }
+      ]
+    }
+  ]
+}
