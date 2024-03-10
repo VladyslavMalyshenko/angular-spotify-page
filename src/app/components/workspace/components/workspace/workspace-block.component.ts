@@ -23,17 +23,18 @@ export class WorkspaceBlockComponent implements AfterViewInit {
     public songService: SongService
   ) {}
 
+  public playSong(song: ISong) {
+    this.songService.playSong(song);
+  }
+
   ngAfterViewInit() {
     const path = this.route.snapshot.routeConfig?.path;
-    console.log(path);
 
     if (path === 'collection/songs') {
       this.playlist$ = this.playlistService.getCollection();
-      console.log('HERE');
     } else {
       const id: any = this.route.snapshot.paramMap.get('id');
       this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
-      console.log('HERE2');
     }
 
     this.currentSong$ = this.songService.currentSong$;

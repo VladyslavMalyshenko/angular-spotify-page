@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Personally created files
+db.json
+
 # Compiled output
 /dist
 /tmp
@@ -40,5 +43,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-/yarn.lock
-/package-lock.json
+yarn.lock
+package-lock.json

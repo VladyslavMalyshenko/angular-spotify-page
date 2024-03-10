@@ -1,0 +1,152 @@
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000;
+  padding: 15px 10px;
+  box-sizing: border-box;
+  color: #fff;
+
+  &-main {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    gap: var(--ui-gap);
+
+    & img {
+      width: auto;
+      height: 90%;
+      border-radius: var(--ui-radius);
+    }
+
+    &-info {
+      overflow: hidden;
+
+      & p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      &-author {
+        opacity: 0.5;
+        transition: 0.3s;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  &-buttons {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ui-gap);
+    }
+
+    &-play {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 100%;
+      border: 0;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        scale: 105%;
+      }
+
+      & svg {
+        width: 90%;
+        height: 90%;
+      }
+    }
+
+    &-loop {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: transparent;
+      opacity: 0.5;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &.active {
+        opacity: 1;
+        color: var(--brand-color);
+      }
+    }
+
+    &-progress {
+      width: 75%;
+      display: flex;
+      align-items: center;
+
+      &-time {
+        padding: 0 12px;
+      }
+
+      &-bar {
+        position: absolute;
+        left: 0;
+        background-color: var(--brand-color);
+        height: 100%;
+        transition: 0.3s;
+        border-radius: var(--ui-radius);
+
+        &-handler {
+          position: absolute;
+          right: -5px;
+          width: 10px;
+          height: 10px;
+          background: #fff;
+          border-radius: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+        }
+
+        &-container {
+          position: relative;
+          width: 75%;
+          height: 4px;
+          background-color: #535353;
+          cursor: pointer;
+          border-radius: var(--ui-radius);
+        }
+      }
+    }
+  }
+}
