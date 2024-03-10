@@ -8,7 +8,7 @@ const routes: Routes = [
       import('./main-page/main-page.module').then(
         (data) => data.MainPageModule
       ),
-  },
+  }
 ];
 
 @NgModule({

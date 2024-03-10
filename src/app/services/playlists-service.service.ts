@@ -19,6 +19,7 @@ export interface IPlaylist {
   image?: string;
   user?: string;
   songs?: ISong[];
+  color?: string;
 }
 
 @Injectable({

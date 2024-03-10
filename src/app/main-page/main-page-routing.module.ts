@@ -5,6 +5,11 @@ import { MainComponent } from './components/main/main.component';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'main',
+    pathMatch: 'full',
+  },
+  {
+    path: 'main',
     component: MainComponent,
   },
   {
@@ -13,6 +18,10 @@ export const routes: Routes = [
   },
   {
     path: 'collection/songs',
+    component: MainComponent,
+  },
+  {
+    path: 'search',
     component: MainComponent,
   },
 ];

@@ -1,20 +1,89 @@
+@keyframes heartBump {
+  0% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 60%;
+  }
+
+  70% {
+    scale: 100%;
+  }
+
+  80% {
+    scale: 60%;
+  }
+
+  100% {
+    scale: 100%;
+  }
+}
+
 .workspace {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #121212;
+  background: linear-gradient(145deg, var(--first-color, #121212), #121212 85%);
   border-radius: var(--ui-radius);
   overflow: hidden;
+
+  &-header {
+    width: 100%;
+    height: 35%;
+    display: flex;
+    align-items: center;
+    padding: 50px;
+    box-sizing: border-box;
+
+    &-image {
+      width: 225px;
+      height: 225px;
+      border-radius: var(--ui-radius);
+      overflow: hidden;
+      box-shadow: 0 0 10px #000;
+
+      &-avatar {
+        width: 100%;
+        height: 100%;
+
+        &:hover {
+          &.favorite {
+            & svg {
+              animation: heartBump 1s;
+            }
+          }
+        }
+
+        &.favorite {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #6a4deb, #a6bbde);
+
+          & svg {
+            width: 35%;
+            height: 35%;
+            fill: #fff;
+            stroke: #fff;
+          }
+        }
+      }
+    }
+  }
 }
 
 .playlist-songs {
   width: 100%;
+  height: 65%;
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap);
   margin: 0;
   padding: 10px;
   box-sizing: border-box;
+  background: #1212127c;
+  backdrop-filter: blur(5px);
 }
 
 .playlist-song {
@@ -41,6 +110,25 @@
     background: #ffffff5d;
   }
 
+  &-cell {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &.index {
+      width: 5vh;
+    }
+
+    &.song {
+      width: 100vh;
+    }
+  }
+
+  &-index {
+    opacity: 0.5;
+  }
+
   &-wrapper {
     width: 100%;
     height: $maxSizes;
@@ -48,21 +136,29 @@
     align-items: center;
 
     &-main {
+      width: 100%;
       display: flex;
       align-items: center;
       gap: var(--ui-gap);
+      overflow: hidden;
     }
   }
 
   &-info {
     display: flex;
     flex-direction: column;
+    width: 50%;
     height: 100%;
     justify-content: space-between;
     padding: 2px 0;
     box-sizing: border-box;
+    overflow: hidden;
 
     & p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
       cursor: pointer;
 
       &:hover {

@@ -16,7 +16,7 @@
     background: #ffffff34;
     & .favorites {
       & svg {
-        animation: hearBump 1s;
+        animation: heartBump 1s;
       }
     }
   }
@@ -69,7 +69,7 @@
   }
 }
 
-@keyframes hearBump {
+@keyframes heartBump {
   0% {
     scale: 100%;
   }

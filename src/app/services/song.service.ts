@@ -23,6 +23,10 @@ class HTMLAudioElementCustom extends HTMLAudioElement {
   public setLoop(value: boolean) {
     this.loop = value;
   }
+
+  public setCurrentTime(value: number) {
+    this.currentTime = value;
+  }
 }
 
 customElements.define('audio-custom', HTMLAudioElementCustom, {
@@ -135,6 +139,10 @@ export class SongService implements OnDestroy {
     (this.currentSongSubject.value as any).isPaused = this.audio?.paused;
 
     return this.currentSongSubject.value;
+  }
+
+  public getCurrentSongDuration() {
+    return this.audio?.duration;
   }
 
   ngOnDestroy() {

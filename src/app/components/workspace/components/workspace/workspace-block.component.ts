@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
@@ -16,6 +16,9 @@ import { SongService } from '../../../../services/song.service';
 export class WorkspaceBlockComponent implements AfterViewInit {
   public playlist$?: Observable<IPlaylist>;
   public currentSong$?: Observable<ISong | undefined>;
+  public path?: string;
+
+  @ViewChild('workspace') workspace?: ElementRef<any>;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,9 +31,9 @@ export class WorkspaceBlockComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const path = this.route.snapshot.routeConfig?.path;
+    this.path = this.route.snapshot.routeConfig?.path;
 
-    if (path === 'collection/songs') {
+    if (this.path === 'collection/songs') {
       this.playlist$ = this.playlistService.getCollection();
     } else {
       const id: any = this.route.snapshot.paramMap.get('id');
@@ -38,5 +41,14 @@ export class WorkspaceBlockComponent implements AfterViewInit {
     }
 
     this.currentSong$ = this.songService.currentSong$;
+
+    this.playlist$.subscribe((playlist: IPlaylist | undefined) => {
+      if (this.workspace && playlist && playlist.color) {
+        this.workspace.nativeElement.style.setProperty(
+          '--first-color',
+          playlist.color
+        );
+      }
+    });
   }
 }
