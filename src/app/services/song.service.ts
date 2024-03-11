@@ -3,8 +3,8 @@ import { BehaviorSubject, Observable, Subscription, interval } from 'rxjs';
 import { ISong } from './playlists-service.service';
 
 export interface ISongTime {
-  currentTime: number | string | undefined;
-  duration: number | string | undefined;
+  currentTime: number | undefined;
+  duration: number | undefined;
 }
 
 class HTMLAudioElementCustom extends HTMLAudioElement {
@@ -54,6 +54,12 @@ export class SongService implements OnDestroy {
 
   constructor() {
     this.initTimeUpdates();
+  }
+
+  public setCurrentTime(value: number) {
+    (this.time$ as any).currentTime = value;
+    (this.currentTimeSubject as any).currentTime = value;
+    this.audio?.setCurrentTime(value);
   }
 
   private initTimeUpdates(): void {

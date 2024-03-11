@@ -1,10 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
+import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SongService } from '../services/song.service';
 
@@ -14,11 +8,7 @@ import { SongService } from '../services/song.service';
 export class ProgressDirective implements OnInit, OnDestroy {
   private timeUpdateSubscription?: Subscription;
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private songService: SongService
-  ) {}
+  constructor(private el: ElementRef, private songService: SongService) {}
 
   ngOnInit(): void {
     this.timeUpdateSubscription = this.songService.time$.subscribe((time) => {
@@ -27,13 +17,25 @@ export class ProgressDirective implements OnInit, OnDestroy {
         time.currentTime !== undefined &&
         time.duration !== undefined
       ) {
-        const progressPercentage =
-          ((time.currentTime as any) / (time.duration as any)) * 100;
-        this.renderer.setStyle(
-          this.el.nativeElement,
-          'width',
-          `${progressPercentage}%`
-        );
+        const duration: number = time.duration;
+        const currentTime: number = time.currentTime;
+
+        const progressBarElement = this.el.nativeElement.children[0];
+
+        let progress = `${(currentTime / duration) * 100}%`;
+
+        progressBarElement.style.width = progress;
+
+        this.el.nativeElement.onclick = (e: any) => {
+          const newWidth: number =
+            (e.offsetX * 100) / this.el.nativeElement.clientWidth;
+
+          progressBarElement.style.width = `${newWidth}%`;
+
+          const newTime = (duration * newWidth) / 100;
+
+          this.songService.setCurrentTime(newTime);
+        };
       }
     });
   }

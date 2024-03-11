@@ -36,8 +36,10 @@ export class WorkspaceBlockComponent implements AfterViewInit {
     if (this.path === 'collection/songs') {
       this.playlist$ = this.playlistService.getCollection();
     } else {
-      const id: any = this.route.snapshot.paramMap.get('id');
-      this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
+      const id: string | null = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
+      }
     }
 
     this.currentSong$ = this.songService.currentSong$;
