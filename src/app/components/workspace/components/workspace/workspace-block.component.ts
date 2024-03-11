@@ -37,20 +37,22 @@ export class WorkspaceBlockComponent implements AfterViewInit {
       this.playlist$ = this.playlistService.getCollection();
     } else {
       const id: string | null = this.route.snapshot.paramMap.get('id');
-      if (id) {
+      if (id !== null) {
         this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
       }
     }
 
     this.currentSong$ = this.songService.currentSong$;
 
-    this.playlist$.subscribe((playlist: IPlaylist | undefined) => {
-      if (this.workspace && playlist && playlist.color) {
-        this.workspace.nativeElement.style.setProperty(
-          '--first-color',
-          playlist.color
-        );
-      }
-    });
+    if (this.playlist$) {
+      this.playlist$.subscribe((playlist: IPlaylist | undefined) => {
+        if (this.workspace && playlist && playlist.color) {
+          this.workspace.nativeElement.style.setProperty(
+            '--first-color',
+            playlist.color
+          );
+        }
+      });
+    }
   }
 }
