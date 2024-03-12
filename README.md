@@ -5,6 +5,7 @@ You need to create `db.json` file in root folder of project and here is a templa
 ```
 {
   "collection": {
+    "id": number,
     "color": string,
     "songs": [
         {

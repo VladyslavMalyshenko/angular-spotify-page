@@ -25,6 +25,7 @@ export interface IPlaylist {
 }
 
 export interface ICollection {
+  id?: number;
   color?: string;
   songs?: ISong[];
 }

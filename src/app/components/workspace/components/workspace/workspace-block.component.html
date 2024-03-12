@@ -35,7 +35,10 @@
   </div>
   <ul class="playlist-songs">
     @for (song of playlist.songs; track song.id; let i = $index) {
-    <li class="playlist-song">
+    <li
+      class="playlist-song"
+      [ngClass]="songService.isCurrentSong(song) ? 'active' : ''"
+    >
       <div class="playlist-song-wrapper">
         <div class="playlist-song-cell index">
           <p class="playlist-song-index">{{ i + 1 }}</p>
@@ -55,10 +58,16 @@
                   "
                 >
                   <ng-container
-                    *ngIf="currentSong.id === song.id; else notCurrentSongIcon"
+                    *ngIf="
+                      songService.isCurrentSong(song);
+                      else notCurrentSongIcon
+                    "
                   >
                     <ng-container
-                      *ngIf="currentSong.isPaused; else playingIcon"
+                      *ngIf="
+                        songService.isCurrentSongPaused();
+                        else playingIcon
+                      "
                     >
                       <!-- Paused Icon SVG -->
                       <svg
@@ -123,8 +132,8 @@
         </div>
 
         <div class="playlist-song-cell playing">
-          @if (currentSong$ | async; as currentSong) { @if (currentSong.id ===
-          song.id && !currentSong.isPaused) {
+          @if (songService.isCurrentSong(song) &&
+          !songService.isCurrentSongPaused()) {
           <div class="playlist-song-wrapper-main-playing">
             <span class="playlist-song-wrapper-main-playing-element"></span>
             <span class="playlist-song-wrapper-main-playing-element"></span>
@@ -132,7 +141,7 @@
             <span class="playlist-song-wrapper-main-playing-element"></span>
             <span class="playlist-song-wrapper-main-playing-element"></span>
           </div>
-          } }
+          }
         </div>
       </div>
     </li>

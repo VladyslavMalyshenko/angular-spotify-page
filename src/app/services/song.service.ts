@@ -149,6 +149,9 @@ export class SongService implements OnDestroy {
   }
 
   public onSongEnded() {
+    const currentSong: ISong = this.getCurrentSong() as ISong;
+    const playlistId: number = currentSong?.playlistId;
+
     const setNewSong = (data: IPlaylist | ICollection) => {
       if (data.songs) {
         let newSong;
@@ -164,9 +167,6 @@ export class SongService implements OnDestroy {
         this.setCurrentSong(newSong as ISong);
       }
     };
-
-    const currentSong: ISong = this.getCurrentSong() as ISong;
-    const playlistId: number = currentSong?.playlistId;
 
     if (playlistId !== 0) {
       this.playlistService
@@ -191,7 +191,11 @@ export class SongService implements OnDestroy {
   }
 
   public playSong(song: ISong): void {
-    if (song.id === this.currentSongSubject.value?.id && this.audio) {
+    if (
+      song.id === this.currentSongSubject.value?.id &&
+      song.playlistId === this.currentSongSubject.value?.playlistId &&
+      this.audio
+    ) {
       this.pauseSong();
     } else {
       if (!this.audio) {
@@ -262,9 +266,13 @@ export class SongService implements OnDestroy {
   }
 
   public getCurrentSong(): ISong | undefined {
-    (this.currentSongSubject.value as any).isPaused = this.audio?.paused;
+    if (this.currentSongSubject.value) {
+      (this.currentSongSubject.value as any).isPaused = this.audio?.paused;
 
-    return this.currentSongSubject.value;
+      return this.currentSongSubject.value;
+    } else {
+      return;
+    }
   }
 
   public setCurrentSong(newSong: ISong): ISong | undefined {
@@ -277,6 +285,28 @@ export class SongService implements OnDestroy {
       return this.audio.duration;
     } else {
       return;
+    }
+  }
+
+  public isCurrentSong(song: ISong) {
+    const currentSong = this.getCurrentSong() as ISong;
+
+    if (currentSong) {
+      return (
+        currentSong.id === song.id && currentSong.playlistId === song.playlistId
+      );
+    } else {
+      return false;
+    }
+  }
+
+  public isCurrentSongPaused() {
+    const currentSong = this.getCurrentSong() as ISong;
+
+    if (currentSong) {
+      return currentSong.isPaused;
+    } else {
+      return true;
     }
   }
 
