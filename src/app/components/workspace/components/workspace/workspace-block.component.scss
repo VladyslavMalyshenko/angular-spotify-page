@@ -35,6 +35,20 @@
     align-items: center;
     padding: 50px;
     box-sizing: border-box;
+    gap: calc(var(--ui-gap) * 4);
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ui-gap);
+      justify-content: center;
+      color: #fff;
+
+      &-name {
+        font-size: 50px;
+        font-weight: 800;
+      }
+    }
 
     &-image {
       width: 225px;

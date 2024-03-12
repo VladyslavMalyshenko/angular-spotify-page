@@ -22,6 +22,16 @@
       <img class="workspace-header-image-avatar" [src]="playlist.image" />
       }
     </div>
+
+    <div class="workspace-header-info">
+      @if (path === "collection/songs") {
+      <p class="workspace-header-info-name">Favorite songs</p>
+      } @else {
+      <p class="workspace-header-info-name">{{ playlist.name }}</p>
+      }
+
+      <p>{{ playlist.user }}</p>
+    </div>
   </div>
   <ul class="playlist-songs">
     @for (song of playlist.songs; track song.id; let i = $index) {

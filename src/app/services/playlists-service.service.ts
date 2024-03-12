@@ -5,6 +5,8 @@ import { environment } from '../../environment.dev';
 
 export interface ISong {
   id: number;
+  songId: number;
+  playlistId: number;
   name: string;
   image: string;
   creator: string;
@@ -20,6 +22,11 @@ export interface IPlaylist {
   user?: string;
   songs?: ISong[];
   color?: string;
+}
+
+export interface ICollection {
+  color?: string;
+  songs?: ISong[];
 }
 
 @Injectable({
