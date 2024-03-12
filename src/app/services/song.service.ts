@@ -13,7 +13,7 @@ export interface ISongTime {
 }
 
 class HTMLAudioElementCustom extends HTMLAudioElement {
-  constructor() {
+  constructor(private songService: SongService) {
     super();
   }
 
@@ -35,6 +35,22 @@ class HTMLAudioElementCustom extends HTMLAudioElement {
 
   public setSource(value: string) {
     this.src = value;
+  }
+
+  public skipTo(forward: boolean, step: number) {
+    if (forward) {
+      if (this.currentTime <= this.duration) {
+        this.currentTime += step;
+      } else if (this.currentTime >= this.duration) {
+        this.songService.onSongEnded();
+      }
+    } else {
+      if (this.currentTime > 0) {
+        this.currentTime -= step;
+      } else if (this.currentTime < 0) {
+        this.currentTime = 0;
+      }
+    }
   }
 }
 
@@ -86,7 +102,53 @@ export class SongService implements OnDestroy {
     });
   }
 
-  private onSongEnded() {
+  public switchSong(isNext: boolean = true) {
+    const currentSong: ISong = this.getCurrentSong() as ISong;
+
+    const setNewSong = (data: IPlaylist | ICollection) => {
+      if (data.songs) {
+        let newSong;
+
+        if (isNext === true) {
+          const nextId = currentSong.songId + 1;
+
+          if (nextId <= data.songs[data.songs.length - 1].songId) {
+            newSong = data.songs.find((song: ISong) => song.songId === nextId);
+          } else {
+            newSong = data.songs[0];
+          }
+        } else {
+          const previousId = currentSong.songId - 2;
+
+          if (previousId >= 0) {
+            newSong = data.songs[previousId];
+          } else {
+            const newSongId = data.songs[data.songs.length - 1].songId;
+
+            newSong = data.songs.find(
+              (song: ISong) => song.songId === newSongId
+            );
+          }
+        }
+
+        this.setCurrentSong(newSong as ISong);
+      }
+    };
+
+    const playlistId: number = currentSong?.playlistId;
+
+    if (playlistId !== 0) {
+      this.playlistService
+        .getPlaylist(playlistId)
+        .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
+    } else {
+      this.playlistService
+        .getCollection()
+        .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
+    }
+  }
+
+  public onSongEnded() {
     const setNewSong = (data: IPlaylist | ICollection) => {
       if (data.songs) {
         let newSong;
@@ -142,6 +204,7 @@ export class SongService implements OnDestroy {
       this.audio?.setVolume(0.5);
       this.audio?.play();
       this.currentSongSubject.next(song);
+      (this.currentSongSubject.value as any).isPaused = false;
 
       if (this.audio) {
         const object: ISongTime = {
@@ -172,8 +235,13 @@ export class SongService implements OnDestroy {
         currentTime: this.audio.currentTime,
         duration: this.audio.duration,
       };
+
       this.currentTimeSubject.next(object);
     }
+  }
+
+  public skipTo(forward: boolean = true, step: number = 5) {
+    this.audio?.skipTo(forward, step);
   }
 
   public getIsLooped() {

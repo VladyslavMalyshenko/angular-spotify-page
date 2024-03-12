@@ -64,6 +64,24 @@
       gap: var(--ui-gap);
     }
 
+    &-switch {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: transparent;
+      opacity: 0.5;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
     &-play {
       width: 32px;
       height: 32px;
@@ -120,8 +138,8 @@
 
       &-bar {
         position: absolute;
+        background: #fff;
         left: 0;
-        background-color: var(--brand-color);
         height: 100%;
         border-radius: var(--ui-radius);
         transition: 0.3s;
@@ -136,6 +154,8 @@
           top: 50%;
           transform: translateY(-50%);
           cursor: pointer;
+          opacity: 0;
+          transition: 0.3s;
         }
 
         &-container {
@@ -145,6 +165,16 @@
           background-color: #535353;
           cursor: pointer;
           border-radius: var(--ui-radius);
+
+          &:hover {
+            & .player-buttons-progress-bar {
+              background-color: var(--brand-color);
+
+              &-handler {
+                opacity: 1;
+              }
+            }
+          }
         }
       }
     }
