@@ -121,6 +121,19 @@
             </div>
           </div>
         </div>
+
+        <div class="playlist-song-cell playing">
+          @if (currentSong$ | async; as currentSong) { @if (currentSong.id ===
+          song.id && !currentSong.isPaused) {
+          <div class="playlist-song-wrapper-main-playing">
+            <span class="playlist-song-wrapper-main-playing-element"></span>
+            <span class="playlist-song-wrapper-main-playing-element"></span>
+            <span class="playlist-song-wrapper-main-playing-element"></span>
+            <span class="playlist-song-wrapper-main-playing-element"></span>
+            <span class="playlist-song-wrapper-main-playing-element"></span>
+          </div>
+          } }
+        </div>
       </div>
     </li>
     }

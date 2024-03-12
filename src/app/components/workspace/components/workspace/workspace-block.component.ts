@@ -29,6 +29,7 @@ export class WorkspaceBlockComponent implements AfterViewInit {
   public playSong(song: ISong) {
     this.songService.playSong(song);
   }
+
   ngAfterViewInit() {
     window.addEventListener('keydown', (e) => {
       if (e.keyCode === 32) {
