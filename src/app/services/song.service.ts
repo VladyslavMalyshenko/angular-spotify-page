@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, interval } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import {
   ICollection,
   IPlaylist,
@@ -8,8 +8,8 @@ import {
 } from './playlists-service.service';
 
 export interface ISongTime {
-  currentTime: number | undefined;
-  duration: number | undefined;
+  currentTime: number;
+  duration: number;
 }
 
 class HTMLAudioElementCustom extends HTMLAudioElement {
@@ -66,40 +66,18 @@ export class SongService implements OnDestroy {
   private currentSongSubject: BehaviorSubject<ISong | undefined> =
     new BehaviorSubject<ISong | undefined>(undefined);
 
-  private currentTimeSubject: BehaviorSubject<ISongTime | undefined> =
-    new BehaviorSubject<ISongTime | undefined>(undefined);
-
   public currentSong$: Observable<ISong | undefined> =
     this.currentSongSubject.asObservable();
-
-  public time$: Observable<ISongTime | undefined> =
-    this.currentTimeSubject.asObservable();
 
   public audio?: HTMLAudioElementCustom;
   private timeUpdateSubscription?: Subscription;
 
-  constructor(private playlistService: PlaylistsService) {
-    this.initTimeUpdates();
-  }
+  constructor(private playlistService: PlaylistsService) {}
 
   public setCurrentTime(value: number) {
-    if (this.time$ && this.audio && this.currentTimeSubject) {
-      (this.time$ as any).currentTime = value;
-      (this.currentTimeSubject as any).currentTime = value;
-      this.audio?.setCurrentTime(value);
+    if (this.audio) {
+      this.audio.setCurrentTime(value);
     }
-  }
-
-  private initTimeUpdates(): void {
-    this.timeUpdateSubscription = interval(1000).subscribe(() => {
-      if (this.audio && !this.audio.paused) {
-        const object: ISongTime = {
-          currentTime: this.audio.currentTime,
-          duration: this.audio.duration,
-        };
-        this.currentTimeSubject.next(object);
-      }
-    });
   }
 
   public switchSong(isNext: boolean = true) {
@@ -209,14 +187,6 @@ export class SongService implements OnDestroy {
       this.audio?.play();
       this.currentSongSubject.next(song);
       (this.currentSongSubject.value as any).isPaused = false;
-
-      if (this.audio) {
-        const object: ISongTime = {
-          currentTime: this.audio.currentTime,
-          duration: this.audio.duration,
-        };
-        this.currentTimeSubject.next(object);
-      }
     }
   }
 
@@ -234,13 +204,6 @@ export class SongService implements OnDestroy {
         this.audio.pause();
       }
       value.isPaused = this.audio.paused;
-
-      const object: ISongTime = {
-        currentTime: this.audio.currentTime,
-        duration: this.audio.duration,
-      };
-
-      this.currentTimeSubject.next(object);
     }
   }
 
@@ -280,11 +243,14 @@ export class SongService implements OnDestroy {
     return newSong;
   }
 
-  public getCurrentSongDuration() {
+  public getCurrentSongTime(): ISongTime | undefined {
     if (this.audio) {
-      return this.audio.duration;
+      return {
+        currentTime: this.audio.currentTime,
+        duration: this.audio.duration,
+      };
     } else {
-      return;
+      return undefined;
     }
   }
 

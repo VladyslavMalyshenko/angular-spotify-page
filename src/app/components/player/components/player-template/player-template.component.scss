@@ -142,7 +142,8 @@
         left: 0;
         height: 100%;
         border-radius: var(--ui-radius);
-        transition: 0.3s;
+        max-width: 100%;
+        min-width: 0%;
 
         &-handler {
           position: absolute;

@@ -10,12 +10,10 @@ import { SongService } from '../../../../services/song.service';
 })
 export class PlayerTemplateComponent implements OnInit {
   public currentSong$?: Observable<ISong | undefined>;
-  public songTime$?: Observable<any>;
 
   constructor(public songService: SongService) {}
 
   ngOnInit() {
     this.currentSong$ = this.songService.currentSong$;
-    this.songTime$ = this.songService.time$;
   }
 }

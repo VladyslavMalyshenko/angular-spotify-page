@@ -79,7 +79,7 @@
       </button>
     </div>
 
-    @if (songTime$ | async; as time) {
+    @if (songService.getCurrentSongTime(); as time) {
     <div class="player-buttons-progress">
       <span class="player-buttons-progress-time">{{
         time.currentTime | formatTime
