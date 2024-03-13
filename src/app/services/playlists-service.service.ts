@@ -49,4 +49,8 @@ export class PlaylistsService {
   public getCollection(): Observable<any> {
     return this._httpClient.get<any>(`${environment.domain}/collection`);
   }
+
+  public getSongs(): Observable<any> {
+    return this._httpClient.get<any>(`${environment.domain}/songs`);
+  }
 }

@@ -12,7 +12,11 @@
     <div class="player-buttons-main">
       <button
         class="player-buttons-switch"
-        (click)="songService.switchSong(false)"
+        (click)="
+          currentSong.playlistId
+            ? songService.switchSong(false)
+            : songService.switchSong(false, true)
+        "
       >
         <svg
           data-encore-id="icon"
@@ -45,7 +49,11 @@
 
       <button
         class="player-buttons-switch"
-        (click)="songService.switchSong(true)"
+        (click)="
+          currentSong.playlistId
+            ? songService.switchSong(true)
+            : songService.switchSong(true, true)
+        "
       >
         <svg
           data-encore-id="icon"

@@ -24,6 +24,10 @@ export const routes: Routes = [
     path: 'search',
     component: MainComponent,
   },
+  {
+    path: 'search/:request',
+    component: MainComponent,
+  },
 ];
 
 @NgModule({

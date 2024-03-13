@@ -80,49 +80,81 @@ export class SongService implements OnDestroy {
     }
   }
 
-  public switchSong(isNext: boolean = true) {
+  public switchSong(isNext: boolean = true, noPlaylist?: boolean) {
     const currentSong: ISong = this.getCurrentSong() as ISong;
 
-    const setNewSong = (data: IPlaylist | ICollection) => {
-      if (data.songs) {
-        let newSong;
+    const setNewSong = (data: IPlaylist | ICollection | ISong[]) => {
+      let newSong;
 
-        if (isNext === true) {
-          const nextId = currentSong.songId + 1;
+      if (!noPlaylist) {
+        if ((data as IPlaylist | ICollection).songs) {
+          const playlistSongs: any = (data as IPlaylist | ICollection).songs;
 
-          if (nextId <= data.songs[data.songs.length - 1].songId) {
-            newSong = data.songs.find((song: ISong) => song.songId === nextId);
+          if (isNext === true) {
+            const nextId = currentSong.songId + 1;
+
+            if (nextId <= playlistSongs[playlistSongs.length - 1].songId) {
+              newSong = playlistSongs.find(
+                (song: ISong) => song.songId === nextId
+              );
+            } else {
+              newSong = playlistSongs[0];
+            }
           } else {
-            newSong = data.songs[0];
-          }
-        } else {
-          const previousId = currentSong.songId - 2;
+            const previousId = currentSong.songId - 2;
 
-          if (previousId >= 0) {
-            newSong = data.songs[previousId];
-          } else {
-            const newSongId = data.songs[data.songs.length - 1].songId;
+            if (previousId >= 0) {
+              newSong = playlistSongs[previousId];
+            } else {
+              const newSongId = playlistSongs[playlistSongs.length - 1].songId;
 
-            newSong = data.songs.find(
-              (song: ISong) => song.songId === newSongId
-            );
+              newSong = playlistSongs.find(
+                (song: ISong) => song.songId === newSongId
+              );
+            }
           }
         }
+      } else {
+        const songs = data as ISong[];
 
-        this.setCurrentSong(newSong as ISong);
+        if (isNext === true) {
+          const nextId = currentSong.id + 1;
+
+          if (nextId <= songs[songs.length - 1].id) {
+            newSong = songs.find((song: ISong) => song.id === nextId);
+          } else {
+            newSong = songs[0];
+          }
+        } else {
+          const previousId = currentSong.id - 2;
+
+          if (previousId >= 0) {
+            newSong = songs[previousId];
+          } else {
+            const newSongId = songs[songs.length - 1].id;
+
+            newSong = songs.find((song: ISong) => song.id === newSongId);
+          }
+        }
       }
+
+      this.setCurrentSong(newSong as ISong);
     };
 
     const playlistId: number = currentSong?.playlistId;
 
-    if (playlistId !== 0) {
+    if (playlistId > 0) {
       this.playlistService
         .getPlaylist(playlistId)
         .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
-    } else {
+    } else if (playlistId === 0) {
       this.playlistService
         .getCollection()
         .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
+    } else if (!playlistId) {
+      this.playlistService
+        .getSongs()
+        .subscribe((data: ISong[]) => setNewSong(data));
     }
   }
 

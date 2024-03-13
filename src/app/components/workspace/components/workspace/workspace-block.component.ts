@@ -15,13 +15,16 @@ import { SongService } from '../../../../services/song.service';
 })
 export class WorkspaceBlockComponent implements AfterViewInit {
   public playlist$?: Observable<IPlaylist>;
+  public playlists$?: Observable<IPlaylist[]>;
+  public songs$?: Observable<ISong[]>;
   public currentSong$?: Observable<ISong | undefined>;
   public path?: string;
+  public searchRequest: string = '';
 
   @ViewChild('workspace') workspace?: ElementRef<any>;
 
   constructor(
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private playlistService: PlaylistsService,
     public songService: SongService
   ) {}
@@ -45,11 +48,14 @@ export class WorkspaceBlockComponent implements AfterViewInit {
 
     if (this.path === 'collection/songs') {
       this.playlist$ = this.playlistService.getCollection();
-    } else {
+    } else if (this.path === 'playlist/:id') {
       const id: string | null = this.route.snapshot.paramMap.get('id');
       if (id !== null) {
         this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
       }
+    } else if (this.path === 'search' || this.path === 'search/:request') {
+      this.songs$ = this.playlistService.getSongs();
+      this.playlists$ = this.playlistService.getPlaylists();
     }
 
     this.currentSong$ = this.songService.currentSong$;
