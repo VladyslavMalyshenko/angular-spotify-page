@@ -46,11 +46,13 @@ export class PlaylistsService {
       .pipe(map((data: IPlaylist[]) => data[0]));
   }
 
-  public getCollection(): Observable<any> {
-    return this._httpClient.get<any>(`${environment.domain}/collection`);
+  public getCollection(): Observable<ICollection> {
+    return this._httpClient.get<ICollection>(
+      `${environment.domain}/collection`
+    );
   }
 
-  public getSongs(): Observable<any> {
-    return this._httpClient.get<any>(`${environment.domain}/songs`);
+  public getSongs(): Observable<ISong[]> {
+    return this._httpClient.get<ISong[]>(`${environment.domain}/songs`);
   }
 }

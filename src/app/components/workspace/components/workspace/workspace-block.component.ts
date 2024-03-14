@@ -21,7 +21,7 @@ export class WorkspaceBlockComponent implements AfterViewInit {
   public path?: string;
   public searchRequest: string = '';
 
-  @ViewChild('workspace') workspace?: ElementRef<any>;
+  @ViewChild('workspace') workspace?: ElementRef<HTMLDivElement>;
 
   constructor(
     public route: ActivatedRoute,

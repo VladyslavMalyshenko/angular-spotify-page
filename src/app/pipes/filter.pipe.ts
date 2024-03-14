@@ -1,10 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { IPlaylist, ISong } from '../services/playlists-service.service';
 
 @Pipe({
   name: 'appFilter',
 })
 export class SearchFilterPipe implements PipeTransform {
-  transform(value: any, args?: any): any {
+  transform(value: ISong[] | IPlaylist[], args?: string): any {
     if (!value) {
       return null;
     } else if (!args) {
@@ -13,8 +14,12 @@ export class SearchFilterPipe implements PipeTransform {
 
     args = args.toLowerCase();
 
-    return value.filter((item: any) =>
-      JSON.stringify(item).toLocaleLowerCase().includes(args)
+    const result = value.filter((item: ISong | IPlaylist) =>
+      JSON.stringify(item)
+        .toLocaleLowerCase()
+        .includes(args as string)
     );
+
+    return result;
   }
 }
