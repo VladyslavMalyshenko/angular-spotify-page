@@ -6,11 +6,13 @@ import { SearchFilterPipe } from '../../pipes/filter.pipe';
 import { PlaylistsService } from '../../services/playlists-service.service';
 import { SongService } from '../../services/song.service';
 import { WorkspaceBlockComponent } from './components/workspace/workspace-block.component';
+import { PlaylistComponent } from './components/workspace/components/playlist/playlist.component';
+import { SearchComponent } from './components/workspace/components/search/search.component';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule, FormsModule],
   exports: [WorkspaceBlockComponent],
-  declarations: [WorkspaceBlockComponent, SearchFilterPipe],
+  declarations: [WorkspaceBlockComponent, SearchFilterPipe, PlaylistComponent, SearchComponent],
   providers: [PlaylistsService, SongService, SearchFilterPipe],
 })
 export class WorkspaceModule {}

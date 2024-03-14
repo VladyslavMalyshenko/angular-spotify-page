@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
@@ -13,27 +13,20 @@ import { SongService } from '../../../../services/song.service';
   templateUrl: './workspace-block.component.html',
   styleUrl: './workspace-block.component.scss',
 })
-export class WorkspaceBlockComponent implements AfterViewInit {
+export class WorkspaceBlockComponent implements OnInit {
   public playlist$?: Observable<IPlaylist>;
-  public playlists$?: Observable<IPlaylist[]>;
-  public songs$?: Observable<ISong[]>;
   public currentSong$?: Observable<ISong | undefined>;
   public path?: string;
-  public searchRequest: string = '';
 
   @ViewChild('workspace') workspace?: ElementRef<HTMLDivElement>;
 
   constructor(
     public route: ActivatedRoute,
-    private playlistService: PlaylistsService,
-    public songService: SongService
+    public songService: SongService,
+    private playlistService: PlaylistsService
   ) {}
 
-  public playSong(song: ISong) {
-    this.songService.playSong(song);
-  }
-
-  ngAfterViewInit() {
+  ngOnInit() {
     window.addEventListener('keydown', (e) => {
       if (e.keyCode === 32) {
         this.songService.pauseSong();
@@ -53,12 +46,7 @@ export class WorkspaceBlockComponent implements AfterViewInit {
       if (id !== null) {
         this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
       }
-    } else if (this.path === 'search' || this.path === 'search/:request') {
-      this.songs$ = this.playlistService.getSongs();
-      this.playlists$ = this.playlistService.getPlaylists();
     }
-
-    this.currentSong$ = this.songService.currentSong$;
 
     if (this.playlist$) {
       this.playlist$.subscribe((playlist: IPlaylist | undefined) => {

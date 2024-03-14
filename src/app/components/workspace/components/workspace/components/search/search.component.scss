@@ -1,0 +1,177 @@
+.search-input-container {
+  position: relative;
+  max-width: 300px;
+  height: 48px;
+
+  & svg {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+  }
+}
+
+.search-head-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ui-gap) * 10);
+  padding: 50px;
+  box-sizing: border-box;
+}
+
+.search-input {
+  width: 100%;
+  background-color: #242424;
+  border: 0;
+  border-radius: 200px;
+  color: #fff !important;
+  height: 100%;
+  padding: 6px 36px;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.search-items-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ui-gap) * 3);
+  padding: 0;
+
+  &-category {
+    color: #fff;
+    font-size: 25px;
+    font-weight: 700;
+  }
+}
+
+.search-nothing-result {
+  color: #fff;
+  font-size: 17px;
+}
+
+.search-songs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+}
+
+.search-song {
+  $maxSizes: 100px;
+  width: 100px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  padding: 20px;
+  border-radius: var(--ui-radius);
+  overflow: hidden;
+
+  &:hover {
+    & .search-song-info-creator {
+      opacity: 1;
+    }
+
+    background: #ffffff17;
+  }
+
+  &:active,
+  &.active {
+    background: #ffffff5d;
+  }
+
+  &-wrapper {
+    width: 100%;
+    height: $maxSizes;
+    display: flex;
+    align-items: center;
+
+    &-main {
+      width: 100%;
+      display: flex;
+      gap: var(--ui-gap);
+      flex-direction: column;
+      overflow: hidden;
+    }
+  }
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    padding: 2px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    & p {
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &-creator {
+      opacity: 0.5;
+      transition: 0.3s;
+    }
+  }
+
+  &-image {
+    position: relative;
+    width: $maxSizes;
+    height: $maxSizes;
+    cursor: pointer;
+    border-radius: var(--ui-radius);
+    overflow: hidden;
+    transition: 0.3s;
+
+    &:hover {
+      border-radius: 0;
+      & .search-song-image-play {
+        opacity: 1;
+      }
+    }
+
+    & img {
+      width: 100%;
+      height: 100%;
+    }
+
+    &-play {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      background: #0000002f;
+      transition: 0.3s;
+
+      & svg {
+        position: absolute;
+        width: 40%;
+        height: 40%;
+        color: #fff;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}

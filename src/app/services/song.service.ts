@@ -85,6 +85,7 @@ export class SongService implements OnDestroy {
 
     const setNewSong = (data: IPlaylist | ICollection | ISong[]) => {
       let newSong;
+      const time = this.getCurrentSongTime();
 
       if (!noPlaylist) {
         if ((data as IPlaylist | ICollection).songs) {
@@ -104,17 +105,21 @@ export class SongService implements OnDestroy {
                 newSong = playlistSongs[0];
               }
             } else {
-              const previousId = currentSong.songId - 2;
+              if (time && time.currentTime < 2) {
+                const previousId = currentSong.songId - 2;
 
-              if (previousId >= 0) {
-                newSong = playlistSongs[previousId];
+                if (previousId >= 0) {
+                  newSong = playlistSongs[previousId];
+                } else {
+                  const newSongId =
+                    playlistSongs[playlistSongs.length - 1].songId;
+
+                  newSong = playlistSongs.find(
+                    (song: ISong) => song.songId === newSongId
+                  );
+                }
               } else {
-                const newSongId =
-                  playlistSongs[playlistSongs.length - 1].songId;
-
-                newSong = playlistSongs.find(
-                  (song: ISong) => song.songId === newSongId
-                );
+                this.setCurrentTime(0);
               }
             }
           }
@@ -142,14 +147,18 @@ export class SongService implements OnDestroy {
             newSong = songs[0];
           }
         } else {
-          const previousId = currentSong.id - 2;
+          if (time && time.currentTime < 2) {
+            const previousId = currentSong.id - 2;
 
-          if (previousId >= 0) {
-            newSong = songs[previousId];
+            if (previousId >= 0) {
+              newSong = songs[previousId];
+            } else {
+              const newSongId = songs[songs.length - 1].id;
+
+              newSong = songs.find((song: ISong) => song.id === newSongId);
+            }
           } else {
-            const newSongId = songs[songs.length - 1].id;
-
-            newSong = songs.find((song: ISong) => song.id === newSongId);
+            this.setCurrentTime(0);
           }
         }
       }
@@ -176,37 +185,15 @@ export class SongService implements OnDestroy {
 
   public onSongEnded() {
     const currentSong: ISong = this.getCurrentSong() as ISong;
-    const playlistId: number = currentSong?.playlistId;
+    const playlistId =
+      typeof currentSong?.playlistId === 'string'
+        ? parseInt(currentSong?.playlistId)
+        : currentSong?.playlistId;
 
-    const setNewSong = (data: IPlaylist | ICollection) => {
-      if (data.songs) {
-        let newSong;
+    const isPlaylistId: boolean =
+      playlistId === 0 || playlistId > 0 ? false : true;
 
-        if (currentSong.songId !== data.songs[data.songs.length - 1].songId) {
-          newSong = data.songs.find(
-            (song: ISong) => song.songId === currentSong.songId + 1
-          );
-        } else {
-          newSong = data.songs[0];
-        }
-
-        this.setCurrentSong(newSong as ISong);
-      }
-    };
-
-    if (playlistId === 0) {
-      this.playlistService
-        .getPlaylist(playlistId)
-        .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
-    } else if (playlistId > 0) {
-      this.playlistService
-        .getCollection()
-        .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
-    } else if (!playlistId) {
-      this.playlistService
-        .getCollection()
-        .subscribe((data: IPlaylist | ICollection) => setNewSong(data));
-    }
+    this.switchSong(true, isPlaylistId);
   }
 
   public createAudioElement(): void {
