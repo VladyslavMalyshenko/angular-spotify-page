@@ -1,3 +1,5 @@
+### This project was inspired by [Spotify](https://www.spotify.com/).
+
 # db.json
 
 You need to create `db.json` file in root folder of project and here is a template of data:
