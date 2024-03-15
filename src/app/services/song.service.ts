@@ -278,6 +278,8 @@ export class SongService implements OnDestroy {
     if (this.currentSongSubject.value) {
       (this.currentSongSubject.value as ISong).isPaused = this.audio?.paused;
 
+      this.updateCurrentSong();
+
       return this.currentSongSubject.value;
     } else {
       return;
@@ -291,16 +293,6 @@ export class SongService implements OnDestroy {
 
   public getCurrentSongTime(): ISongTime | undefined {
     if (this.audio) {
-      const newSongObject: ISong | undefined = this.getCurrentSong();
-
-      if (newSongObject) {
-        newSongObject.currentTime = this.audio.currentTime;
-        this.localStorage.setLocalStorage(
-          'currentSong',
-          JSON.stringify(newSongObject)
-        );
-      }
-
       return {
         currentTime: this.audio.currentTime,
         duration: this.audio.duration,
@@ -332,18 +324,89 @@ export class SongService implements OnDestroy {
     }
   }
 
+  public updateCurrentSong() {
+    if (this.audio) {
+      const newSongObject: ISong | undefined = this.currentSongSubject.value;
+
+      if (newSongObject) {
+        newSongObject.currentTime = this.audio.currentTime;
+        this.localStorage.setLocalStorage(
+          'currentSong',
+          JSON.stringify(newSongObject)
+        );
+      }
+    }
+  }
+
   public restoreCurrentSong() {
     const currentSong = this.getCurrentSong();
 
     if (!currentSong) {
       try {
         const song = JSON.parse(
-          this.localStorage.getLocalStorage('currentSong') as string
+          this.localStorage.getLocalStorage('currentSong')
         ) as ISong;
 
-        if (song && song.song) {
-          this.playSong(song, song.isPaused ?? true);
-          this.audio?.setCurrentTime(song.currentTime as number);
+        if (song) {
+          if (song && song.id) {
+            if (song.id && song.playlistId > 0 && song.songId) {
+              this.playlistService
+                .getPlaylists()
+                .subscribe((data: IPlaylist[]) => {
+                  const playlist = data.find(
+                    (playlistItem: IPlaylist) =>
+                      song.playlistId == playlistItem.id
+                  );
+
+                  if (playlist && playlist.songs) {
+                    const songFound = playlist.songs.find(
+                      (dataSong: ISong) =>
+                        dataSong.id === song.id &&
+                        dataSong.songId === song.songId &&
+                        dataSong.playlistId === song.playlistId
+                    );
+
+                    if (songFound) {
+                      this.playSong(songFound, song.isPaused ?? true);
+                      this.audio?.setCurrentTime(
+                        (song.currentTime as number) ?? 0
+                      );
+                    }
+                  }
+                });
+            } else if (song.id && song.playlistId == 0 && song.songId) {
+              this.playlistService
+                .getCollection()
+                .subscribe((data: ICollection) => {
+                  if (data && data.songs) {
+                    const songFound = data.songs.find(
+                      (dataSong: ISong) =>
+                        dataSong.id === song.id &&
+                        dataSong.songId === song.songId &&
+                        dataSong.playlistId === song.playlistId
+                    );
+
+                    if (songFound) {
+                      this.playSong(songFound, song.isPaused ?? true);
+                      this.audio?.setCurrentTime(
+                        (song.currentTime as number) ?? 0
+                      );
+                    }
+                  }
+                });
+            } else if (song.id && !song.playlistId) {
+              this.playlistService.getSongs().subscribe((data: ISong[]) => {
+                const songFound = data.find(
+                  (dataSong: ISong) => dataSong.id === song.id
+                );
+
+                if (songFound) {
+                  this.playSong(songFound, song.isPaused ?? true);
+                  this.audio?.setCurrentTime((song.currentTime as number) ?? 0);
+                }
+              });
+            }
+          }
         }
       } catch (err) {
         return;
