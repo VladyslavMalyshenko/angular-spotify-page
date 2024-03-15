@@ -15,7 +15,7 @@
         (click)="
           currentSong.playlistId > 0 || currentSong.playlistId === 0
             ? songService.switchSong(false)
-            : songService.switchSong(false, true)
+            : songService.switchSong(false)
         "
       >
         <svg
@@ -52,7 +52,7 @@
         (click)="
           currentSong.playlistId > 0 || currentSong.playlistId === 0
             ? songService.switchSong(true)
-            : songService.switchSong(true, true)
+            : songService.switchSong(true)
         "
       >
         <svg

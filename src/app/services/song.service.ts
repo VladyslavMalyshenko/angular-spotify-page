@@ -43,7 +43,7 @@ class HTMLAudioElementCustom extends HTMLAudioElement {
       if (this.currentTime <= this.duration) {
         this.currentTime += step;
       } else if (this.currentTime >= this.duration) {
-        this.songService.onSongEnded();
+        this.songService.switchSong(true);
       }
     } else {
       if (this.currentTime > 0) {
@@ -52,6 +52,10 @@ class HTMLAudioElementCustom extends HTMLAudioElement {
         this.currentTime = 0;
       }
     }
+  }
+
+  public setMuted(value: boolean) {
+    this.muted = value;
   }
 }
 
@@ -84,67 +88,45 @@ export class SongService implements OnDestroy {
     }
   }
 
-  public switchSong(isNext: boolean = true, noPlaylist?: boolean) {
+  public switchSong(isNext: boolean = true) {
     const currentSong: ISong = this.getCurrentSong() as ISong;
+
+    const transformToNumber = (value: string | number) => {
+      if (typeof value === 'string') {
+        return parseInt(value);
+      } else {
+        return value;
+      }
+    };
 
     const setNewSong = (data: IPlaylist | ICollection | ISong[]) => {
       let newSong;
       const time = this.getCurrentSongTime();
+      const songs = (data as IPlaylist | ICollection).songs
+        ? (data as IPlaylist | ICollection).songs
+        : (data as ISong[]);
 
-      if (!noPlaylist) {
-        if ((data as IPlaylist | ICollection).songs) {
-          const playlistSongs: ISong[] | undefined = (
-            data as IPlaylist | ICollection
-          ).songs;
-
-          if (playlistSongs) {
-            if (isNext === true) {
-              const nextId = currentSong.songId + 1;
-
-              if (nextId <= playlistSongs[playlistSongs.length - 1].songId) {
-                newSong = playlistSongs.find(
-                  (song: ISong) => song.songId === nextId
-                );
-              } else {
-                newSong = playlistSongs[0];
-              }
-            } else {
-              if (time && time.currentTime < 2) {
-                const previousId = currentSong.songId - 2;
-
-                if (previousId >= 0) {
-                  newSong = playlistSongs[previousId];
-                } else {
-                  const newSongId =
-                    playlistSongs[playlistSongs.length - 1].songId;
-
-                  newSong = playlistSongs.find(
-                    (song: ISong) => song.songId === newSongId
-                  );
-                }
-              } else {
-                this.setCurrentTime(0);
-              }
-            }
-          }
-        }
-      } else {
-        const songs = data as ISong[];
-
+      if (songs) {
+        const isSongId = currentSong.songId ? true : false;
+        const lastArrayElement = songs[songs.length - 1];
         if (isNext === true) {
-          const nextId =
-            (typeof currentSong.id === 'string'
-              ? parseInt(currentSong.id)
-              : currentSong.id) + 1;
+          const nextId = isSongId
+            ? transformToNumber(currentSong.songId) + 1
+            : transformToNumber(currentSong.id) + 1;
 
-          const maxIdRaw = songs[songs.length - 1].id;
+          const maxIdRaw = isSongId
+            ? lastArrayElement.songId
+            : lastArrayElement.id;
           const maxId =
             typeof maxIdRaw === 'string' ? parseInt(maxIdRaw) : maxIdRaw;
 
-          if (nextId <= maxId) {
+          if (nextId <= maxIdRaw) {
             newSong = songs.find((song: ISong) => {
-              const songId =
-                typeof song.id === 'string' ? parseInt(song.id) : song.id;
+              const songId = isSongId
+                ? song.songId
+                : typeof song.id === 'string'
+                ? parseInt(song.id)
+                : song.id;
               return songId === nextId;
             });
           } else {
@@ -152,14 +134,20 @@ export class SongService implements OnDestroy {
           }
         } else {
           if (time && time.currentTime < 2) {
-            const previousId = currentSong.id - 2;
+            const previousId = isSongId
+              ? transformToNumber(currentSong.songId) - 2
+              : transformToNumber(currentSong.id) - 2;
 
             if (previousId >= 0) {
               newSong = songs[previousId];
             } else {
-              const newSongId = songs[songs.length - 1].id;
+              const newSongId = isSongId
+                ? lastArrayElement.songId
+                : lastArrayElement.id;
 
-              newSong = songs.find((song: ISong) => song.id === newSongId);
+              newSong = songs.find((song: ISong) =>
+                isSongId ? song.songId === newSongId : song.id === newSongId
+              );
             }
           } else {
             this.setCurrentTime(0);
@@ -187,26 +175,13 @@ export class SongService implements OnDestroy {
     }
   }
 
-  public onSongEnded() {
-    const currentSong: ISong = this.getCurrentSong() as ISong;
-    const playlistId =
-      typeof currentSong?.playlistId === 'string'
-        ? parseInt(currentSong?.playlistId)
-        : currentSong?.playlistId;
-
-    const isPlaylistId: boolean =
-      playlistId === 0 || playlistId > 0 ? false : true;
-
-    this.switchSong(true, isPlaylistId);
-  }
-
   public createAudioElement(): void {
     this.audio = document.createElement('audio', {
       is: 'audio-custom',
     }) as unknown as HTMLAudioElementCustom;
     this.audio.id = 'audioElement';
 
-    this.audio.addEventListener('ended', () => this.onSongEnded());
+    this.audio.addEventListener('ended', () => this.switchSong(true));
 
     document.body.appendChild(this.audio);
   }
@@ -227,8 +202,17 @@ export class SongService implements OnDestroy {
       this.audio?.removeAttribute('src');
       this.audio?.setSource(song.song);
       this.audio?.setVolume(0.5);
+      this.audio?.load();
       if (!isPausedByDefault) {
-        this.audio?.play();
+        const play = this.audio?.play();
+
+        if (play !== undefined) {
+          play
+            .then((_) => {})
+            .catch(() => {
+              this.pauseSong();
+            });
+        }
       }
 
       this.currentSongSubject.next(song);
