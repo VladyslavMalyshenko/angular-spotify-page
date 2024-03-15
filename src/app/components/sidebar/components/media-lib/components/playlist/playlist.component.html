@@ -1,4 +1,10 @@
-<li class="playlist" [routerLink]="[url]" routerLinkActive="active">
+<li
+  class="playlist"
+  draggable="true"
+  [routerLink]="[url]"
+  routerLinkActive="active"
+  (dragstart)="onDragStart($event)"
+>
   @if (isFavorite) {
   <div class="favorites avatar">
     <svg

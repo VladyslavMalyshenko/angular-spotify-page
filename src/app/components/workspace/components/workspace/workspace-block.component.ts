@@ -27,16 +27,6 @@ export class WorkspaceBlockComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 32) {
-        this.songService.pauseSong();
-      } else if (e.keyCode === 39) {
-        this.songService.skipTo(true);
-      } else if (e.keyCode === 37) {
-        this.songService.skipTo(false);
-      }
-    });
-
     this.path = this.route.snapshot.routeConfig?.path;
 
     if (this.path === 'collection/songs') {

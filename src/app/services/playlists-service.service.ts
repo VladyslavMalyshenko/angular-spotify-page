@@ -13,6 +13,7 @@ export interface ISong {
   song: string;
   isPaused?: boolean;
   isLooped?: boolean;
+  currentTime?: number;
 }
 
 export interface IPlaylist {

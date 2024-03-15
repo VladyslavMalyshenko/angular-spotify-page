@@ -10,4 +10,13 @@ export class PlaylistComponent {
     '../../../../../../assets/playlist_1.jpg';
   @Input() isFavorite?: boolean = false;
   @Input() url!: string;
+
+  onDragStart(e: DragEvent): void {
+    if (this.url) {
+      e.dataTransfer?.setData(
+        'text/plain',
+        `http://localhost:4200${this.url}`
+      );
+    }
+  }
 }

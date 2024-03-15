@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { LocalStorageService } from './local-storage.service';
 import {
   ICollection,
   IPlaylist,
@@ -72,7 +73,10 @@ export class SongService implements OnDestroy {
   public audio?: HTMLAudioElementCustom;
   private timeUpdateSubscription?: Subscription;
 
-  constructor(private playlistService: PlaylistsService) {}
+  constructor(
+    private playlistService: PlaylistsService,
+    private localStorage: LocalStorageService
+  ) {}
 
   public setCurrentTime(value: number) {
     if (this.audio) {
@@ -207,7 +211,7 @@ export class SongService implements OnDestroy {
     document.body.appendChild(this.audio);
   }
 
-  public playSong(song: ISong): void {
+  public playSong(song: ISong, isPausedByDefault: boolean = false): void {
     if (
       song.id === this.currentSongSubject.value?.id &&
       song.playlistId === this.currentSongSubject.value?.playlistId &&
@@ -223,9 +227,12 @@ export class SongService implements OnDestroy {
       this.audio?.removeAttribute('src');
       this.audio?.setSource(song.song);
       this.audio?.setVolume(0.5);
-      this.audio?.play();
+      if (!isPausedByDefault) {
+        this.audio?.play();
+      }
+
       this.currentSongSubject.next(song);
-      (this.currentSongSubject.value as ISong).isPaused = false;
+      (this.currentSongSubject.value as ISong).isPaused = isPausedByDefault;
     }
   }
 
@@ -284,6 +291,16 @@ export class SongService implements OnDestroy {
 
   public getCurrentSongTime(): ISongTime | undefined {
     if (this.audio) {
+      const newSongObject: ISong | undefined = this.getCurrentSong();
+
+      if (newSongObject) {
+        newSongObject.currentTime = this.audio.currentTime;
+        this.localStorage.setLocalStorage(
+          'currentSong',
+          JSON.stringify(newSongObject)
+        );
+      }
+
       return {
         currentTime: this.audio.currentTime,
         duration: this.audio.duration,
@@ -312,6 +329,25 @@ export class SongService implements OnDestroy {
       return currentSong.isPaused;
     } else {
       return true;
+    }
+  }
+
+  public restoreCurrentSong() {
+    const currentSong = this.getCurrentSong();
+
+    if (!currentSong) {
+      try {
+        const song = JSON.parse(
+          this.localStorage.getLocalStorage('currentSong') as string
+        ) as ISong;
+
+        if (song && song.song) {
+          this.playSong(song, song.isPaused ?? true);
+          this.audio?.setCurrentTime(song.currentTime as number);
+        }
+      } catch (err) {
+        return;
+      }
     }
   }
 
