@@ -49,6 +49,7 @@ export class ProgressDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.onTimeUpdate();
     this.addEventListeners();
   }
 

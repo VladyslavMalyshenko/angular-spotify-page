@@ -57,6 +57,10 @@ class HTMLAudioElementCustom extends HTMLAudioElement {
   public setMuted(value: boolean) {
     this.muted = value;
   }
+
+  public getVolume() {
+    return this.volume;
+  }
 }
 
 customElements.define('audio-custom', HTMLAudioElementCustom, {
@@ -120,7 +124,7 @@ export class SongService implements OnDestroy {
           const maxId =
             typeof maxIdRaw === 'string' ? parseInt(maxIdRaw) : maxIdRaw;
 
-          if (nextId <= maxIdRaw) {
+          if (nextId <= maxId) {
             newSong = songs.find((song: ISong) => {
               const songId = isSongId
                 ? song.songId
@@ -198,10 +202,16 @@ export class SongService implements OnDestroy {
         this.createAudioElement();
       }
 
+      const currentVolume = this.localStorage.getLocalStorage(
+        'currentSongVolume'
+      )
+        ? JSON.parse(this.localStorage.getLocalStorage('currentSongVolume'))
+        : 0.5;
+
       this.audio?.pause();
       this.audio?.removeAttribute('src');
       this.audio?.setSource(song.song);
-      this.audio?.setVolume(0.5);
+      this.setVolume(currentVolume);
       this.audio?.load();
       if (!isPausedByDefault) {
         const play = this.audio?.play();
@@ -395,6 +405,48 @@ export class SongService implements OnDestroy {
       } catch (err) {
         return;
       }
+    }
+  }
+
+  public getCurrentSongVolume() {
+    const volume = this.audio ? this.audio?.volume : 0;
+
+    return volume;
+  }
+
+  public changeVolume(add: boolean = true, step: number = 0.05) {
+    if (this.audio) {
+      let currentVolume: number = add
+        ? this.audio.volume + step
+        : this.audio.volume - step;
+
+      currentVolume = parseFloat(currentVolume.toFixed(2));
+
+      currentVolume =
+        currentVolume > 1 ? 1 : currentVolume < 0 ? 0 : currentVolume;
+
+      this.localStorage.setLocalStorage(
+        'currentSongVolume',
+        JSON.stringify(currentVolume)
+      );
+      this.audio.setVolume(currentVolume);
+    }
+  }
+
+  public setVolume(value: number) {
+    if (this.audio) {
+      let currentVolume: number = value;
+
+      currentVolume = parseFloat(currentVolume.toFixed(2));
+
+      currentVolume =
+        currentVolume > 1 ? 1 : currentVolume < 0 ? 0 : currentVolume;
+
+      this.localStorage.setLocalStorage(
+        'currentSongVolume',
+        JSON.stringify(currentVolume)
+      );
+      this.audio.setVolume(currentVolume);
     }
   }
 

@@ -1,6 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ISong } from '../../../../services/playlists-service.service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { SongService } from '../../../../services/song.service';
 
 @Component({
@@ -8,8 +6,9 @@ import { SongService } from '../../../../services/song.service';
   templateUrl: './player-template.component.html',
   styleUrl: './player-template.component.scss',
 })
-export class PlayerTemplateComponent implements OnInit, OnDestroy {
-  public currentSong$?: Observable<ISong | undefined>;
+export class PlayerTemplateComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   private onKeyDownBind = this.onKeyDown.bind(this);
 
   constructor(public songService: SongService) {}
@@ -21,6 +20,10 @@ export class PlayerTemplateComponent implements OnInit, OnDestroy {
       this.songService.skipTo(true);
     } else if (e.keyCode === 37) {
       this.songService.skipTo(false);
+    } else if (e.keyCode === 38) {
+      this.songService.changeVolume(true);
+    } else if (e.keyCode === 40) {
+      this.songService.changeVolume(false);
     }
   }
 
@@ -33,9 +36,11 @@ export class PlayerTemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentSong$ = this.songService.currentSong$;
-
     this.addKeyEventListener();
+  }
+
+  ngAfterViewInit() {
+    this.songService.getCurrentSongVolume();
   }
 
   ngOnDestroy() {
