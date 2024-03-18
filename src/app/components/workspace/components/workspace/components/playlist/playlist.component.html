@@ -10,7 +10,6 @@
         stroke-width="2"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        class="w-8 h-8 transform scale-95"
       >
         <path
           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
@@ -40,7 +39,17 @@
   >
     <div class="playlist-song-wrapper">
       <div class="playlist-song-cell index">
+        @if (songService.isCurrentSong(song) &&
+        !songService.isCurrentSongPaused()) {
+        <div class="playlist-song-wrapper-main-playing">
+          <span class="playlist-song-wrapper-main-playing-element"></span>
+          <span class="playlist-song-wrapper-main-playing-element"></span>
+          <span class="playlist-song-wrapper-main-playing-element"></span>
+          <span class="playlist-song-wrapper-main-playing-element"></span>
+        </div>
+        } @else {
         <p class="playlist-song-index">{{ i + 1 }}</p>
+        }
       </div>
       <div class="playlist-song-cell song">
         <div class="playlist-song-wrapper-main">
@@ -123,18 +132,20 @@
           </div>
         </div>
       </div>
-
-      <div class="playlist-song-cell playing">
-        @if (songService.isCurrentSong(song) &&
-        !songService.isCurrentSongPaused()) {
-        <div class="playlist-song-wrapper-main-playing">
-          <span class="playlist-song-wrapper-main-playing-element"></span>
-          <span class="playlist-song-wrapper-main-playing-element"></span>
-          <span class="playlist-song-wrapper-main-playing-element"></span>
-          <span class="playlist-song-wrapper-main-playing-element"></span>
-          <span class="playlist-song-wrapper-main-playing-element"></span>
-        </div>
-        }
+      <div class="playlist-song-cell favorite-add">
+        <svg
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          (click)="toggleSongFavorites($event, song)"
+          [ngClass]="{ active: favoriteStatuses[song.id] }"
+        >
+          <path
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          ></path>
+        </svg>
       </div>
     </div>
   </li>

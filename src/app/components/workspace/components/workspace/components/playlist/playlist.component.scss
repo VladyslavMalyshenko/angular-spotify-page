@@ -101,14 +101,35 @@
 
     &.index {
       width: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     &.song {
       width: 100vh;
     }
 
-    &.playing {
-      justify-content: flex-end;
+    &.favorite-add {
+      width: 5vh;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & svg {
+        width: 50%;
+        height: 50%;
+        fill: transparent;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &.active {
+          color: var(--brand-color);
+          fill: var(--brand-color);
+        }
+      }
     }
   }
 
@@ -130,8 +151,8 @@
       overflow: hidden;
 
       &-playing {
-        width: 25px;
-        height: 25px;
+        width: 17px;
+        height: 17px;
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
@@ -149,7 +170,7 @@
           animation: musicPlaying 1s infinite forwards;
         }
 
-        @for $i from 1 through 5 {
+        @for $i from 1 through 4 {
           & .playlist-song-wrapper-main-playing-element:nth-child(#{$i}) {
             animation-delay: #{$i * 0.15}s;
           }
