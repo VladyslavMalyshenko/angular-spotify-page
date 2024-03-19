@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import HTMLAudioElementCustom from '../elements/HTMLAudioElementCustom';
+import { transformToNumber } from '../utils/transformToNumber';
 import { LocalStorageService } from './local-storage.service';
 import {
   ICollection,
@@ -46,20 +47,12 @@ export class SongService implements OnDestroy {
   public switchSong(isNext: boolean = true) {
     const currentSong: ISong = this.getCurrentSong() as ISong;
 
-    const transformToNumber = (value: string | number) => {
-      if (typeof value === 'string') {
-        return parseInt(value);
-      } else {
-        return value;
-      }
-    };
-
     const setNewSong = (data: IPlaylist | ICollection | ISong[]) => {
       let newSong;
       const time = this.getCurrentSongTime();
-      const songs = (data as IPlaylist | ICollection).songs
-        ? (data as IPlaylist | ICollection).songs
-        : (data as ISong[]);
+
+      const songs =
+        (data as IPlaylist | ICollection).songs ?? (data as ISong[]);
 
       if (songs) {
         const isSongId = currentSong.songId ? true : false;

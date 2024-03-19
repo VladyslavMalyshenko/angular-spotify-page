@@ -63,6 +63,7 @@
 }
 
 .search-song {
+  position: relative;
   $maxSizes: 100px;
   width: 100px;
   height: 150px;
@@ -113,7 +114,7 @@
     overflow: hidden;
 
     & p {
-      width: 100%;
+      width: 70%;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
@@ -171,6 +172,31 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  &-favorite-add {
+    position: absolute;
+    right: 5px;
+    bottom: 10px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+      width: 50%;
+      height: 50%;
+      fill: transparent;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &.active {
+        color: var(--brand-color);
+        fill: var(--brand-color);
       }
     }
   }

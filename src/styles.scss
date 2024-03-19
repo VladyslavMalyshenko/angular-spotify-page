@@ -36,3 +36,26 @@ p {
   padding: var(--ui-gap);
   box-sizing: border-box;
 }
+
+
+@keyframes heartBump {
+  0% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 60%;
+  }
+
+  70% {
+    scale: 100%;
+  }
+
+  80% {
+    scale: 60%;
+  }
+
+  100% {
+    scale: 100%;
+  }
+}

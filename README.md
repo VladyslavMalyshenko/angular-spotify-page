@@ -7,19 +7,18 @@ You need to create `db.json` file in root folder of project and here is a templa
 ```
 {
   "collection": {
-    "id": number,
     "color": string,
     "songs": [
-        {
-          "id": number,
-          "songId": number,
-          "playlistId": number (set 0),
-          "name": string,
-          "image": string,
-          "creator": string,
-          "song": string
-        }
-        ...
+      {
+        "id": number,
+        "songId": number,
+        "playlistId": 0,
+        "name": string,
+        "image": string,
+        "creator": string,
+        "song": string
+      },
+      ...
     ]
   },
   "playlists": [
@@ -38,7 +37,7 @@ You need to create `db.json` file in root folder of project and here is a templa
           "image": string,
           "creator": string,
           "song": string
-        }
+        },
         ...
       ]
     }
@@ -47,11 +46,11 @@ You need to create `db.json` file in root folder of project and here is a templa
   "songs": [
     {
       "id": number,
-      "name": string
+      "name": string,
       "image": string,
       "creator": string,
       "song": string
-    }
+    },
     ...
   ]
 }

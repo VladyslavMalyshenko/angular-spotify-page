@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { FavoritesService } from '../../../../../../services/favorites.service';
 import {
   IPlaylist,
   ISong,
@@ -23,9 +23,9 @@ export class SearchComponent implements OnInit {
   public searchRequest: string = '';
 
   constructor(
-    private route: ActivatedRoute,
     public songService: SongService,
-    private playlistService: PlaylistsService
+    public playlistService: PlaylistsService,
+    public favoritesService: FavoritesService
   ) {}
 
   ngOnInit() {
@@ -34,6 +34,7 @@ export class SearchComponent implements OnInit {
       this.playlists$ = this.playlistService.getPlaylists();
     }
 
+    this.favoritesService.loadFavorites(this.songs$ as Observable<ISong[]>);
     this.currentSong$ = this.songService.currentSong$;
   }
 }
