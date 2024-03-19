@@ -78,7 +78,7 @@ export class FavoritesService {
     }
   }
 
-  public toggleSongFavoritesData(data: ISong): Observable<ICollection> {
+  private toggleSongFavoritesData(data: ISong): Observable<ICollection> {
     return this.playlistService.getCollection().pipe(
       tap((collection: ICollection) => {
         const songs = collection.songs as ISong[];
@@ -102,6 +102,8 @@ export class FavoritesService {
       classList.toggle('active');
       if (classList.contains('active')) {
         e.currentTarget.style.setProperty('animation', 'heartBump 1s');
+      } else {
+        e.currentTarget.style.removeProperty('animation');
       }
       this.toggleSongFavoritesData(song).subscribe((result) => result);
     }

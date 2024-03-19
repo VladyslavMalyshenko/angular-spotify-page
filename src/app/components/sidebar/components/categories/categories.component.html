@@ -1,6 +1,9 @@
 <div class="categories">
   <ul>
-    <li [routerLink]="['/main']" routerLinkActive="active">
+    <li
+      (click)="routerService.navigateTo(['/main'])"
+      [ngClass]="{ active: routerService.compareUrls('main') }"
+    >
       <svg
         data-encore-id="icon"
         role="img"
@@ -16,7 +19,10 @@
       Главная
     </li>
 
-    <li [routerLink]="['/search']" routerLinkActive="active">
+    <li
+      (click)="routerService.navigateTo(['/search'])"
+      [ngClass]="{ active: routerService.compareUrls('search') }"
+    >
       <svg
         width="24"
         height="24"

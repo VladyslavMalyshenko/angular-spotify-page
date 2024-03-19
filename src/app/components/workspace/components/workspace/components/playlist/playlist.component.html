@@ -1,7 +1,7 @@
 @if (playlist | async; as playlist) {
 <div class="workspace-header">
   <div class="workspace-header-image">
-    @if (path === "collection/songs") {
+    @if (routerService.compareUrls("collection/songs")) {
     <div class="workspace-header-image-avatar favorite">
       <svg
         fill="none"
@@ -22,7 +22,7 @@
   </div>
 
   <div class="workspace-header-info">
-    @if (path === "collection/songs") {
+    @if (routerService.compareUrls("collection/songs")) {
     <p class="workspace-header-info-name">Favorite songs</p>
     } @else {
     <p class="workspace-header-info-name">{{ playlist.name }}</p>
@@ -32,10 +32,10 @@
   </div>
 </div>
 <ul class="playlist-songs">
-  @for (song of playlist.songs; track song.id; let i = $index) {
+  @for (song of playlist.songs; track song.id) {
   <li
     class="playlist-song"
-    [ngClass]="songService.isCurrentSong(song) ? 'active' : ''"
+    [ngClass]="{ active: songService.isCurrentSong(song) }"
   >
     <div class="playlist-song-wrapper">
       <div class="playlist-song-cell index">
@@ -48,7 +48,7 @@
           <span class="playlist-song-wrapper-main-playing-element"></span>
         </div>
         } @else {
-        <p class="playlist-song-index">{{ i + 1 }}</p>
+        <p class="playlist-song-index">{{ song.songId }}</p>
         }
       </div>
       <div class="playlist-song-cell song">

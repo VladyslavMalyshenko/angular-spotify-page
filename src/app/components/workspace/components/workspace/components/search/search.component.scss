@@ -16,11 +16,14 @@
 
 .search-head-container {
   width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   gap: calc(var(--ui-gap) * 10);
   padding: 50px;
   box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .search-input {

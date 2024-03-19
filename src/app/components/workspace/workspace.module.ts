@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { SearchFilterPipe } from '../../pipes/filter.pipe';
 import { FavoritesService } from '../../services/favorites.service';
 import { PlaylistsService } from '../../services/playlists-service.service';
@@ -11,7 +12,7 @@ import { SearchComponent } from './components/workspace/components/search/search
 import { WorkspaceBlockComponent } from './components/workspace/workspace-block.component';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, RouterModule],
   exports: [WorkspaceBlockComponent],
   declarations: [
     WorkspaceBlockComponent,

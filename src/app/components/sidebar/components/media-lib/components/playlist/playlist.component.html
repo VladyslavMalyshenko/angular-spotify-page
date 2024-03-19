@@ -1,8 +1,8 @@
 <li
   class="playlist"
   draggable="true"
-  [routerLink]="[url]"
-  routerLinkActive="active"
+  (click)="routerService.navigateTo([url])"
+  [ngClass]="{ active: routerService.compareUrls(url) }"
   (dragstart)="onDragStart($event)"
 >
   @if (isFavorite) {
@@ -26,10 +26,10 @@
     <p class="playlist-info-description">Playlist | KAKTyC</p>
   </div>
   } @else {
-  <img class="avatar" [src]="image" />
+  <img class="avatar" [src]="playlist.image" />
   <div class="playlist-info">
-    <p class="playlist-info-name">???</p>
-    <p class="playlist-info-description">Playlist | KAKTyC</p>
+    <p class="playlist-info-name">{{ playlist.name }}</p>
+    <p class="playlist-info-description">Playlist | {{ playlist.user }}</p>
   </div>
   }
 </li>

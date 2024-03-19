@@ -12,11 +12,7 @@
     <div class="player-buttons-main">
       <button
         class="player-buttons-switch"
-        (click)="
-          currentSong.playlistId > 0 || currentSong.playlistId === 0
-            ? songService.switchSong(false)
-            : songService.switchSong(false)
-        "
+        (click)="songService.switchSong(false)"
       >
         <svg
           data-encore-id="icon"
@@ -49,11 +45,7 @@
 
       <button
         class="player-buttons-switch"
-        (click)="
-          currentSong.playlistId > 0 || currentSong.playlistId === 0
-            ? songService.switchSong(true)
-            : songService.switchSong(true)
-        "
+        (click)="songService.switchSong(true)"
       >
         <svg
           data-encore-id="icon"
@@ -71,7 +63,7 @@
       <button
         (click)="songService.toggleIsLooped()"
         class="player-buttons-loop"
-        [ngClass]="songService.getIsLooped() === true ? 'active' : ''"
+        [ngClass]="{ active: songService.getIsLooped() }"
       >
         <svg
           data-encore-id="icon"

@@ -1,4 +1,4 @@
-@if (path === 'search' || path === "search/:request") {
+@if (routerService.compareUrls("search")) {
 <div class="search-head-container">
   <div class="search-input-container">
     <input
@@ -27,7 +27,7 @@
       $index) {
       <li
         class="search-song"
-        [ngClass]="songService.isCurrentSong(song) ? 'active' : ''"
+        [ngClass]="{ active: songService.isCurrentSong(song) }"
       >
         <div class="search-song-wrapper">
           <div class="search-song-wrapper-main">
@@ -157,7 +157,11 @@
               <img [src]="playlist.image" />
             </div>
             <div class="search-song-info">
-              <p>{{ playlist.name }}</p>
+              <p
+                (click)="routerService.navigateTo(['playlist/' + playlist.id])"
+              >
+                {{ playlist.name }}
+              </p>
               <p class="search-song-info-creator">{{ playlist.user }}</p>
             </div>
           </div>

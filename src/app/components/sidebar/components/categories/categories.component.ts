@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterService } from '../../../../services/router.service';
 
 @Component({
   selector: 'app-categories',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './categories.component.scss'
 })
 export class CategoriesComponent {
-
+  constructor(public routerService: RouterService) {}
 }

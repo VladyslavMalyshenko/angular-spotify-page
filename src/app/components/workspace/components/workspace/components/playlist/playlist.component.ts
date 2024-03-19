@@ -7,6 +7,7 @@ import {
   PlaylistsService,
 } from '../../../../../../services/playlists-service.service';
 import { SongService } from '../../../../../../services/song.service';
+import { RouterService } from '../../../../../../services/router.service';
 
 @Component({
   selector: 'app-playlist',
@@ -15,14 +16,14 @@ import { SongService } from '../../../../../../services/song.service';
 })
 export class PlaylistComponent implements AfterViewInit {
   @Input() playlist?: Observable<IPlaylist>;
-  @Input() path?: string;
 
   public currentSong$?: Observable<ISong | undefined>;
 
   constructor(
     public songService: SongService,
     public playlistService: PlaylistsService,
-    public favoritesService: FavoritesService
+    public favoritesService: FavoritesService,
+    public routerService: RouterService
   ) {}
 
   ngAfterViewInit() {

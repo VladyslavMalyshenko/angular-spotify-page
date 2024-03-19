@@ -6,7 +6,9 @@ import {
   ISong,
   PlaylistsService,
 } from '../../../../services/playlists-service.service';
+import { RouterService } from '../../../../services/router.service';
 import { SongService } from '../../../../services/song.service';
+import { transformToNumber } from '../../../../utils/transformToNumber';
 
 @Component({
   selector: 'app-workspace-block',
@@ -23,18 +25,21 @@ export class WorkspaceBlockComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     public songService: SongService,
-    private playlistService: PlaylistsService
+    private playlistService: PlaylistsService,
+    private routerService: RouterService
   ) {}
 
   ngOnInit() {
-    this.path = this.route.snapshot.routeConfig?.path;
+    this.path = this.routerService.getCurrentRoute();
 
-    if (this.path === 'collection/songs') {
+    if (this.routerService.compareUrls('collection/songs')) {
       this.playlist$ = this.playlistService.getCollection();
-    } else if (this.path === 'playlist/:id') {
-      const id: string | null = this.route.snapshot.paramMap.get('id');
+    } else if (this.routerService.compareUrls('playlist')) {
+      const id: string | null = this.routerService.getParam(this.route, 'id');
       if (id !== null) {
-        this.playlist$ = this.playlistService.getPlaylist(parseInt(id));
+        this.playlist$ = this.playlistService.getPlaylist(
+          transformToNumber(id)
+        );
       }
     }
 
