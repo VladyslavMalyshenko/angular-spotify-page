@@ -96,6 +96,10 @@
       opacity: 1;
     }
 
+    & .playlist-song-cell.menu {
+      opacity: 1;
+    }
+
     background: #ffffff17;
   }
 
@@ -123,7 +127,7 @@
 
     &.favorite-add {
       position: absolute;
-      right: 20px;
+      right: 60px;
       width: 5vh;
       height: 100%;
       display: flex;
@@ -141,6 +145,118 @@
         &.active {
           color: var(--brand-color);
           fill: var(--brand-color);
+        }
+      }
+    }
+    &.menu {
+      position: absolute;
+      right: 20px;
+      width: 5vh;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: 0.3s;
+
+      &:hover {
+        & .song-menu {
+          display: flex;
+        }
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      & .song-menu {
+        display: none;
+        position: absolute;
+        top: 70%;
+        right: -50%;
+        width: 250px;
+        height: auto;
+        min-height: 0;
+        box-sizing: border-box;
+        background: #121212;
+        align-items: center;
+        flex-direction: column;
+        gap: var(--ui-gap);
+        border-radius: 16px;
+        z-index: 2;
+
+        &-options {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          list-style: none;
+          padding: 2px;
+        }
+
+        &-option {
+          position: relative;
+          width: 80%;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px;
+          box-sizing: border-box;
+          border-radius: 5px;
+
+          &:hover {
+            background: #ffffff2a;
+          }
+
+          &.add {
+            &:hover {
+              & .playlists-list-options {
+                display: flex;
+              }
+            }
+          }
+
+          & .playlists-list {
+            &-options {
+              width: 100px;
+              display: none;
+              position: absolute;
+              height: auto;
+              min-height: 0;
+              top: 0;
+              padding: 10px;
+              left: -60%;
+              background: #121212;
+              list-style: none;
+              margin: 0;
+              gap: calc(var(--ui-gap) * 1.5);
+              flex-direction: column;
+              align-items: center;
+              border-radius: 16px;
+              overflow: hidden;
+            }
+
+            &-option {
+              width: 90%;
+              height: 20px;
+              display: flex;
+              align-items: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              border-radius: 2px;
+              padding: 10px;
+              box-sizing: border-box;
+              transition: 0.3s;
+
+              &:hover {
+                background: #ffffff2a;
+              }
+            }
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 import { environment } from '../../environment.dev';
 import { transformToNumber } from '../utils/transformToNumber';
 
@@ -18,7 +18,7 @@ export interface ISong {
 }
 
 export interface IPlaylist {
-  id?: number;
+  id: number;
   name?: string;
   image?: string;
   user?: string;
@@ -71,7 +71,7 @@ export class PlaylistsService {
           .toUpperCase()
       );
     };
-    
+
     return this.getPlaylists().pipe(
       map((playlists: IPlaylist[]) => playlists[playlists.length - 1]),
       switchMap((lastPlaylist: IPlaylist) => {
@@ -87,6 +87,50 @@ export class PlaylistsService {
         );
       }),
       switchMap(() => this.getPlaylists())
+    );
+  }
+
+  public addSongToPlaylist(
+    song: ISong,
+    playlistId: number | string
+  ): Observable<IPlaylist> {
+    return this.getPlaylist(transformToNumber(playlistId)).pipe(
+      switchMap((playlist: IPlaylist) => {
+        console.log(playlist);
+
+        const songs = playlist.songs || [];
+        const songExists = songs.some(
+          (s) => transformToNumber(s.id) === transformToNumber(song.id)
+        );
+
+        if (!songExists) {
+          const newSongId =
+            songs.length > 0
+              ? transformToNumber(songs[songs.length - 1].id) + 1
+              : 1;
+          const newSong = {
+            ...song,
+            songId: newSongId,
+            playlistId: transformToNumber(playlist.id),
+          };
+          const updatedSongs = [...songs, newSong];
+          const updatedPlaylist = { ...playlist, songs: updatedSongs };
+
+          console.log(updatedPlaylist);
+          try {
+            return this._httpClient.put<any>(
+              `${environment.domain}/playlists/${transformToNumber(
+                playlist.id
+              )}`,
+              updatedPlaylist
+            );
+          } catch (err) {
+            console.log(err);
+          }
+        }
+
+        return of(playlist);
+      })
     );
   }
 }

@@ -148,6 +148,33 @@
           ></path>
         </svg>
       </div>
+      <div class="playlist-song-cell menu">
+        <svg viewBox="0 0 16 16">
+          <path
+            fill="currentColor"
+            d="M3 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm6.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM16 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+          ></path>
+        </svg>
+
+        <div class="song-menu">
+          <ul class="song-menu-options">
+            <li class="song-menu-option add">
+              Add to playlist @if (playlists$ | async; as playlists) {
+              <ul class="playlists-list-options">
+                @for (playlist of playlists; track playlist.id) {
+                <li
+                  class="playlists-list-option"
+                  (click)="addSongToPlaylist(song, playlist.id)"
+                >
+                  {{ playlist.name }}
+                </li>
+                }
+              </ul>
+              }
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </li>
   }

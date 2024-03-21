@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
+  ICollection,
   IPlaylist,
   ISong,
   PlaylistsService,
@@ -16,7 +17,7 @@ import { transformToNumber } from '../../../../utils/transformToNumber';
   styleUrl: './workspace-block.component.scss',
 })
 export class WorkspaceBlockComponent implements OnInit {
-  public playlist$?: Observable<IPlaylist>;
+  public playlist$?: Observable<IPlaylist | ICollection>;
   public currentSong$?: Observable<ISong | undefined>;
   public path?: string;
 
@@ -44,14 +45,16 @@ export class WorkspaceBlockComponent implements OnInit {
     }
 
     if (this.playlist$) {
-      this.playlist$.subscribe((playlist: IPlaylist | undefined) => {
-        if (this.workspace && playlist && playlist.color) {
-          this.workspace.nativeElement.style.setProperty(
-            '--first-color',
-            playlist.color
-          );
+      this.playlist$.subscribe(
+        (playlist: IPlaylist | ICollection | undefined) => {
+          if (this.workspace && playlist && playlist.color) {
+            this.workspace.nativeElement.style.setProperty(
+              '--first-color',
+              playlist.color
+            );
+          }
         }
-      });
+      );
     }
   }
 
