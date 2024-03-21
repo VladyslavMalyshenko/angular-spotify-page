@@ -29,7 +29,7 @@ export class WorkspaceBlockComponent implements OnInit {
     private routerService: RouterService
   ) {}
 
-  ngOnInit() {
+  public initializeWorkspace() {
     this.path = this.routerService.getCurrentRoute();
 
     if (this.routerService.compareUrls('collection/songs')) {
@@ -53,5 +53,9 @@ export class WorkspaceBlockComponent implements OnInit {
         }
       });
     }
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(() => this.initializeWorkspace());
   }
 }

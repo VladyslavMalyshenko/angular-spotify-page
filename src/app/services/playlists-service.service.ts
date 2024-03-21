@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
 import { environment } from '../../environment.dev';
+import { transformToNumber } from '../utils/transformToNumber';
 
 export interface ISong {
   id: number;
@@ -55,5 +56,37 @@ export class PlaylistsService {
 
   public getSongs(): Observable<ISong[]> {
     return this._httpClient.get<ISong[]>(`${environment.domain}/songs`);
+  }
+
+  public addPlaylist(data: any): Observable<IPlaylist[]> {
+    const newData = { ...data };
+    delete newData['description'];
+
+    const generateColor = () => {
+      return (
+        '#' +
+        Math.floor(Math.random() * 16777215)
+          .toString(16)
+          .padStart(6, '0')
+          .toUpperCase()
+      );
+    };
+    
+    return this.getPlaylists().pipe(
+      map((playlists: IPlaylist[]) => playlists[playlists.length - 1]),
+      switchMap((lastPlaylist: IPlaylist) => {
+        const playlistId = lastPlaylist.id as string | number;
+
+        newData.id = transformToNumber(playlistId) + 1;
+        newData.color = generateColor();
+        newData.user = 'KAKTyC';
+
+        return this._httpClient.post<IPlaylist>(
+          `${environment.domain}/playlists`,
+          newData
+        );
+      }),
+      switchMap(() => this.getPlaylists())
+    );
   }
 }

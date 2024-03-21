@@ -123,15 +123,23 @@ export class FavoritesService {
         )
       )
       .subscribe(({ playlist, collection }) => {
-        const songs = ((playlist as IPlaylist).songs ?? playlist) as ISong[];
-        const songsCollection = collection.songs as ISong[];
+        let songs;
+        if ((playlist as IPlaylist).songs || playlist) {
+          songs = (playlist as IPlaylist).songs as ISong[];
+        } else {
+          songs = playlist as ISong[];
+        }
 
-        songs.forEach((song) => {
-          const id = transformToNumber(song.id);
-          this.favoriteStatuses[id] = songsCollection.some(
-            (songItem) => transformToNumber(songItem.id) === id
-          );
-        });
+        if (songs) {
+          const songsCollection = collection.songs as ISong[];
+
+          songs.forEach((song) => {
+            const id = transformToNumber(song.id);
+            this.favoriteStatuses[id] = songsCollection.some(
+              (songItem) => transformToNumber(songItem.id) === id
+            );
+          });
+        }
       });
   }
 }

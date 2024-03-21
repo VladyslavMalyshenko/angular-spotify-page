@@ -31,6 +31,7 @@
     <p>{{ playlist.user }}</p>
   </div>
 </div>
+@if (playlist.songs) {
 <ul class="playlist-songs">
   @for (song of playlist.songs; track song.id) {
   <li
@@ -151,4 +152,4 @@
   </li>
   }
 </ul>
-}
+} }

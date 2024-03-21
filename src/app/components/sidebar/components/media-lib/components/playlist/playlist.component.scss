@@ -50,14 +50,19 @@
 
   & .playlist {
     &-info {
+      width: 50%;
+      height: $maxSizes;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
       color: #fff;
-      height: $maxSizes;
+      overflow: hidden;
 
       & p {
         margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
 
       &-name.favorite {

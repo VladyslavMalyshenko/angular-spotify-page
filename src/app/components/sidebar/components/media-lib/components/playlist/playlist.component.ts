@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { RouterService } from '../../../../../../services/router.service';
 import { IPlaylist } from '../../../../../../services/playlists-service.service';
+import { RouterService } from '../../../../../../services/router.service';
 
 @Component({
   selector: 'app-playlist',
@@ -16,7 +16,10 @@ export class PlaylistComponent {
 
   onDragStart(e: DragEvent): void {
     if (this.url) {
-      e.dataTransfer?.setData('text/plain', `http://localhost:4200${this.url}`);
+      e.dataTransfer?.setData(
+        'text/plain',
+        `${location.protocol}//${location.host}${this.url}`
+      );
     }
   }
 }

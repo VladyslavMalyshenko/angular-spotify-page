@@ -394,6 +394,20 @@ export class SongService implements OnDestroy {
     }
   }
 
+  public muteAudio() {
+    if (this.audio) {
+      this.audio.setMuted(!this.audio.muted);
+    }
+  }
+
+  public getMuted() {
+    if (this.audio) {
+      return this.audio.muted;
+    } else {
+      return false;
+    }
+  }
+
   ngOnDestroy() {
     if (this.timeUpdateSubscription) {
       this.timeUpdateSubscription.unsubscribe();

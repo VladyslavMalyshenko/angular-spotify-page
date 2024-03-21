@@ -14,16 +14,18 @@ export class PlayerTemplateComponent
   constructor(public songService: SongService) {}
 
   private onKeyDown(e: KeyboardEvent) {
-    if (e.keyCode === 32) {
+    if (e.key === ' ') {
       this.songService.pauseSong();
-    } else if (e.keyCode === 39) {
+    } else if (e.key === 'ArrowRight') {
       this.songService.skipTo(true);
-    } else if (e.keyCode === 37) {
+    } else if (e.key === 'ArrowLeft') {
       this.songService.skipTo(false);
-    } else if (e.keyCode === 38) {
+    } else if (e.key === 'ArrowUp') {
       this.songService.changeVolume(true);
-    } else if (e.keyCode === 40) {
+    } else if (e.key === 'ArrowDown') {
       this.songService.changeVolume(false);
+    } else if (e.key === 'm') {
+      this.songService.muteAudio();
     }
   }
 
