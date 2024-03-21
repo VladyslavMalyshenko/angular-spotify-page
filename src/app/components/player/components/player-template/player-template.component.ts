@@ -14,9 +14,7 @@ export class PlayerTemplateComponent
   constructor(public songService: SongService) {}
 
   private onKeyDown(e: KeyboardEvent) {
-    if (e.key === ' ') {
-      this.songService.pauseSong();
-    } else if (e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight') {
       this.songService.skipTo(true);
     } else if (e.key === 'ArrowLeft') {
       this.songService.skipTo(false);

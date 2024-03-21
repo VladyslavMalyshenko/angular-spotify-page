@@ -6,7 +6,14 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import {
   IPlaylist,
@@ -28,8 +35,16 @@ export class CreatePopoutComponent {
 
   public imageSrc =
     'https://images.hungama.com/c/1/793/d99/91239770/91239770_300x300.jpg';
+
+  public notOnlySpaces(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const allowed = control.value.trim();
+      return !allowed ? { onlySpaces: { value: control.value } } : null;
+    };
+  }
+
   public newForm = new FormGroup({
-    name: new FormControl('', Validators.required),
+    name: new FormControl('', [Validators.required, this.notOnlySpaces()]),
     description: new FormControl(''),
     image: new FormControl(''),
   });
@@ -70,5 +85,9 @@ export class CreatePopoutComponent {
 
       reader.readAsDataURL(file);
     }
+  }
+
+  public ches(e: any) {
+    e.currentTarget.classList.toggle('active');
   }
 }

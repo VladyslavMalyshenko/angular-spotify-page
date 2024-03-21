@@ -21,12 +21,34 @@
         <img [src]="imageSrc" />
       </div>
       <div class="create-popout-inputs">
-        <input type="text" formControlName="name" placeholder="Playlist name" />
-        <textarea
-          type="text"
-          formControlName="description"
-          placeholder="Description (optional)"
-        ></textarea>
+        <div class="create-popout-inputs-wrapper" appOnFocus>
+          <label class="create-popout-inputs-label" for="description"
+            >Name</label
+          >
+          <input
+            type="text"
+            formControlName="name"
+            class="create-popout-inputs-input"
+            placeholder="Playlist name"
+          />
+
+          @if (!newForm.controls.name.valid && newForm.controls.name.touched) {
+          <p class="error">This field is required!</p>
+          }
+        </div>
+
+        <div class="create-popout-inputs-wrapper" appOnFocus>
+          <label class="create-popout-inputs-label" for="description"
+            >Description</label
+          >
+          <textarea
+            id="description"
+            type="text"
+            formControlName="description"
+            class="create-popout-inputs-input create-popout-inputs-textarea"
+            placeholder="Description (optional)"
+          ></textarea>
+        </div>
       </div>
     </form>
     <button (click)="onSubmit()" class="create-popout-button">Save</button>

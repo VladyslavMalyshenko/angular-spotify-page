@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { OnFocusDirective } from '../../directives/on-focus.directive';
 import { PlaylistsService } from '../../services/playlists-service.service';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreatePopoutComponent } from './components/media-lib/components/create-popout/create-popout.component';
@@ -25,6 +26,7 @@ import { SideBarComponent } from './components/sidebar/sidebar.component';
     CategoriesComponent,
     PlaylistComponent,
     CreatePopoutComponent,
+    OnFocusDirective
   ],
   providers: [PlaylistsService],
 })

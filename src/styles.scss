@@ -2,6 +2,7 @@
   --ui-radius: 8px;
   --ui-gap: 10px;
   --brand-color: #1ed760;
+  --error-color: #fca9a9;
 }
 
 * {
@@ -37,6 +38,11 @@ p {
   box-sizing: border-box;
 }
 
+.error {
+  margin-top: 5px;
+  color: var(--error-color);
+  font-size: 12px;
+}
 
 @keyframes heartBump {
   0% {
