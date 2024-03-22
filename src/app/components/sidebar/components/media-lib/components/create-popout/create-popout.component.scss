@@ -40,6 +40,10 @@
     cursor: pointer;
     transition: 0.3s;
 
+    &:disabled {
+      opacity: 0.5;
+    }
+
     &:hover {
       scale: 105%;
       background: #f1f1f1;

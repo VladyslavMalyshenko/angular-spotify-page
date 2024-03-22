@@ -6,19 +6,13 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import {
   IPlaylist,
   PlaylistsService,
 } from '../../../../../../services/playlists-service.service';
+import { notOnlySpaces } from '../../../../../../validators/notOnlySpaces';
 
 @Component({
   selector: 'app-create-popout',
@@ -36,15 +30,8 @@ export class CreatePopoutComponent {
   public imageSrc =
     'https://images.hungama.com/c/1/793/d99/91239770/91239770_300x300.jpg';
 
-  public notOnlySpaces(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const allowed = control.value.trim();
-      return !allowed ? { onlySpaces: { value: control.value } } : null;
-    };
-  }
-
   public newForm = new FormGroup({
-    name: new FormControl('', [Validators.required, this.notOnlySpaces()]),
+    name: new FormControl('', [Validators.required, notOnlySpaces()]),
     description: new FormControl(''),
     image: new FormControl(''),
   });
@@ -58,6 +45,7 @@ export class CreatePopoutComponent {
   public onSubmit() {
     if (this.newForm.valid) {
       const data = this.newForm.value;
+      data.name = data.name?.trim();
       data.image = this.imageSrc;
 
       this.playlists = this.playlistService.addPlaylist(data);

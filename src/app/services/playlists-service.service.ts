@@ -96,8 +96,6 @@ export class PlaylistsService {
   ): Observable<IPlaylist> {
     return this.getPlaylist(transformToNumber(playlistId)).pipe(
       switchMap((playlist: IPlaylist) => {
-        console.log(playlist);
-
         const songs = playlist.songs || [];
         const songExists = songs.some(
           (s) => transformToNumber(s.id) === transformToNumber(song.id)
@@ -106,17 +104,24 @@ export class PlaylistsService {
         if (!songExists) {
           const newSongId =
             songs.length > 0
-              ? transformToNumber(songs[songs.length - 1].id) + 1
+              ? transformToNumber(songs[songs.length - 1].songId) + 1
               : 1;
           const newSong = {
             ...song,
             songId: newSongId,
             playlistId: transformToNumber(playlist.id),
           };
+
+          if (newSong['currentTime']) {
+            delete newSong['currentTime'];
+          }
+
+          if (newSong['isPaused']) {
+            delete newSong['isPaused'];
+          }
+
           const updatedSongs = [...songs, newSong];
           const updatedPlaylist = { ...playlist, songs: updatedSongs };
-
-          console.log(updatedPlaylist);
           try {
             return this._httpClient.put<any>(
               `${environment.domain}/playlists/${transformToNumber(

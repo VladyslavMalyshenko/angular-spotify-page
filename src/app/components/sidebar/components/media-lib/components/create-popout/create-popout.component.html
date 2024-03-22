@@ -51,6 +51,12 @@
         </div>
       </div>
     </form>
-    <button (click)="onSubmit()" class="create-popout-button">Save</button>
+    <button
+      (click)="onSubmit()"
+      [disabled]="!newForm.controls.name.valid"
+      class="create-popout-button"
+    >
+      Save
+    </button>
   </div>
 </div>
